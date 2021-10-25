@@ -1,7 +1,8 @@
-package com.example.visibleguitar
+package com.example.visibleguitar.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.visibleguitar.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

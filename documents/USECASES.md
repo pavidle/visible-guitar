@@ -1,3 +1,3 @@
 # Use-cases
 
-![Use-case](../images/use-case.png)
+![Use-case](../images/use-cases.png)
