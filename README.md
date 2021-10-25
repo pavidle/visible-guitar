@@ -9,3 +9,4 @@
 
 * [Видение](documents/VISION.md)
 * [Use-cases](documents/USECASES.md)
+* [Модель предметной области](documents/MODEL.md)
