@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 
 
-CANVAS_SIZE = (600,800)
+CANVAS_SIZE = (600, 800)
 
 FINAL_LINE_COLOR = (255, 255, 255)
 WORKING_LINE_COLOR = (127, 127, 127)
@@ -22,13 +22,11 @@ def rotate(image, degree):
 
 
 def calculate_angle(image, original_image):
-    lines = cv2.HoughLines(image, 1, np.pi / 180, 900)
+    lines = cv2.HoughLines(image, 1, np.pi / 180, 700)
     sum = 0
-    # Нарисуйте каждый отрезок по очереди
     if lines is not None:
         for i in range(len(lines)):
             for rho, theta in lines[i]:
-                # print("theta:", theta, " rho:", rho)
                 a = np.cos(theta)
                 b = np.sin(theta)
                 x0 = a * rho
@@ -37,12 +35,10 @@ def calculate_angle(image, original_image):
                 y1 = int(round(y0 + 1000 * a))
                 x2 = int(round(x0 - 1000 * (-b)))
                 y2 = int(round(y0 - 1000 * a))
-                # В качестве угла поворота выберите только наименьший угол
                 sum += theta
-                cv2.line(original_image, (x1, y1), (x2, y2), (0, 0, 255), 1, cv2.LINE_AA)
-                cv2.imshow("Imagelines", original_image)
+                # cv2.line(original_image, (x1, y1), (x2, y2), (0, 255, 0), 1, cv2.LINE_AA)
+                # cv2.imshow("Imagelines", original_image)
 
-        # Усредняя все углы, эффект вращения будет лучше
         average = sum / len(lines)
         angle = to_radians(average) - 90
         return angle
@@ -50,30 +46,27 @@ def calculate_angle(image, original_image):
 
 class PolygonDrawer(object):
     def __init__(self, window_name):
-        self.window_name = window_name # Name for our window
+        self.window_name = window_name
 
-        self.done = False # Flag signalling we're done
-        self.current = (0, 0) # Current position, so we can draw the line-in-progress
-        self.points = [] # List of points defining our polygon
+        self.done = False
+        self.current = (0, 0)
+        self.points = []
 
     def on_mouse(self, event, x, y, buttons, user_param):
         if self.done:
             return
 
         if event == cv2.EVENT_MOUSEMOVE:
-            # We want to be able to draw the line-in-progress, so update current mouse position
+
             self.current = (x, y)
         elif event == cv2.EVENT_LBUTTONDOWN:
-            # Left click means adding a point at current position to the list of points
             print("Adding point #%d with position(%d,%d)" % (len(self.points), x, y))
             self.points.append((x, y))
         elif event == cv2.EVENT_RBUTTONDOWN:
-            # Right click means we're done
             print("Completing polygon with %d points." % len(self.points))
             self.done = True
 
     def run(self):
-        # Let's create our working window and set a mouse callback to handle events
         cv2.namedWindow(self.window_name)
         _, frame = cap.read()
         cv2.imshow(self.window_name, frame)
@@ -89,9 +82,9 @@ class PolygonDrawer(object):
             if cv2.waitKey(50) == 27:
                 self.done = True
 
-        filter_size = (3, 3)
+        filter_size = (8, 8)
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, filter_size)
-        kernel_dilate = cv2.getStructuringElement(cv2.MORPH_RECT, (4, 4))
+        kernel_dilate = cv2.getStructuringElement(cv2.MORPH_RECT, (2, 2))
 
         while True:
             _, frame = cap.read()
@@ -100,19 +93,29 @@ class PolygonDrawer(object):
             masked = cv2.bitwise_and(frame, frame, mask=mask)
             gray = cv2.cvtColor(masked, cv2.COLOR_BGR2GRAY)
             morph = cv2.morphologyEx(gray, cv2.MORPH_TOPHAT, kernel)
+            # t, thresh = cv2.threshold(morph, 39, 255, cv2.THRESH_BINARY)
+            # canny = cv2.Canny(morph, 50, 400)
+            # sobel_x = cv2.Sobel(morph, cv2.CV_8UC1, 1, 0, ksize=3)
 
-            t, thresh = cv2.threshold(morph, 20, 255, cv2.THRESH_BINARY)
-            dilate = cv2.dilate(thresh, kernel_dilate, iterations=2)
-
+            # dilate = cv2.dilate(thresh, kernel_dilate, iterations=2)
+            #
             alpha = 3
             beta = 0
-            adjusted = cv2.convertScaleAbs(dilate, alpha=alpha, beta=beta)
-            # thresh = cv2.adaptiveThreshold(adjusted, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 17,
-            # 23)
-            degree = calculate_angle(adjusted, frame)
-            rotated_image = rotate(frame, degree)
-            cv2.imshow("rotate", rotated_image)
-            cv2.imshow("dilate", thresh)
+            # adjusted = cv2.convertScaleAbs(laplacian, alpha=alpha, beta=beta)
+
+            degree = calculate_angle(morph, frame)
+            rotated_image = rotate(morph, degree)
+
+            sobel_x = cv2.Sobel(rotated_image, cv2.CV_8UC1, 1, 0, ksize=3)
+            # canny = cv2.Canny(sobel_x, 50, 250)
+            lines = cv2.HoughLinesP(image=sobel_x, rho=1, theta=np.pi / 180, threshold=550, lines=np.array([]), minLineLength=500, maxLineGap=80)
+            # cv2.imshow("gray", sobel_x)
+            a, b, c = lines.shape
+            for i in range(a):
+                cv2.line(frame, (lines[i][0][0], lines[i][0][1]), (lines[i][0][2], lines[i][0][3]), (0, 0, 255), 1,
+                         cv2.LINE_AA)
+                cv2.imshow("lines", frame)
+            cv2.imshow("thresh", sobel_x)
             k = cv2.waitKey(50)
             if k == 27:
                 break

@@ -1,3 +1,3 @@
 # Модель предметной области
 
-![Use-case](../images/model.png)
+![Domain-model](../images/model.png)

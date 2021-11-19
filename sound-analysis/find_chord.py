@@ -4,16 +4,16 @@ import librosa.feature
 import matplotlib.pyplot as plt
 import winsound
 
-file = "chords/fa-minor.wav"
-winsound.PlaySound(file, winsound.SND_FILENAME)
+file = "chords/distortion_chord.wav"
+# winsound.PlaySound(file, winsound.SND_FILENAME)
 x, sample_rate = lr.load(file)
 
 
-hop_length = 4096
+hop_length = 1024
 
-chroma = librosa.feature.chroma_cens(x, sr=sample_rate, hop_length=hop_length)
+chroma = librosa.feature.chroma_cqt(x, sr=sample_rate, hop_length=hop_length)
 plt.figure(figsize=(15, 5))
-librosa.display.specshow(chroma, x_axis='time', y_axis='chroma', hop_length=hop_length, cmap='coolwarm')
+librosa.display.specshow(chroma, x_axis='time', y_axis='chroma', hop_length=hop_length)
 
 plt.show()
 
@@ -30,7 +30,6 @@ sorted_pitches = sorted(d, key=d.get, reverse=True)
 notes_in_chord = sorted_pitches[:3]
 
 print("Доминирующие ноты: " + ", ".join(notes_in_chord))
-
 
 pitch_id = maximum_pitches_values.index(max(maximum_pitches_values))
 pitch = pitches[pitch_id]
