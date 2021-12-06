@@ -11,5 +11,6 @@
 * [Use-cases](documents/USECASES.md)
 * [Модель предметной области](documents/MODEL.md)
 * [Словарь терминов](documents/TERMIN_DICTIONARY.md)
+* [Дополнительная спецификация](documents/ADDITIONAL_SPECIFICATION.md)
 * [IDEF0](documents/IDEF0.md)
-
+* [DFD](documents/DFD.md)
