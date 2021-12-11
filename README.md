@@ -14,3 +14,7 @@
 * [Дополнительная спецификация](documents/ADDITIONAL_SPECIFICATION.md)
 * [IDEF0](documents/IDEF0.md)
 * [DFD](documents/DFD.md)
+
+## UI
+
+* https://www.figma.com/file/wGY7xq9kgQ512fOw7mQCqD/UI-visible-guitar?node-id=0%3A1
