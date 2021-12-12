@@ -14,6 +14,8 @@
 * [Дополнительная спецификация](documents/ADDITIONAL_SPECIFICATION.md)
 * [IDEF0](documents/IDEF0.md)
 * [DFD](documents/DFD.md)
+* [Спецификация прецендентов](documents/SEQUENCE.md)
+
 
 ## UI
 
