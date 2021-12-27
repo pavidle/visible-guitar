@@ -1,12 +1,14 @@
 package com.example.visible_guitar
 
+import android.Manifest
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.SurfaceView
-import android.widget.TextView
-import androidx.core.content.ContextCompat
+import android.view.WindowManager
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import org.opencv.android.BaseLoaderCallback
 import org.opencv.android.CameraBridgeViewBase
 import org.opencv.android.LoaderCallbackInterface
@@ -15,130 +17,93 @@ import org.opencv.core.Mat
 
 class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewListener2 {
 
-    companion object {
-//        private const val REQUEST_CODE_CAMERA_PERMISSION = 101
-        init {
-            System.loadLibrary("visible_guitar")
-        }
-    }
+    private var cameraBridge: CameraBridgeViewBase? = null
 
-    private lateinit var mOpenCvCameraView: CameraBridgeViewBase
-    private lateinit var mIntermediateMat: Mat
-    private val tag = CameraActivity::class.java.simpleName
-
-    private val mLoaderCallback: BaseLoaderCallback = object : BaseLoaderCallback(this) {
+    private val loader = object : BaseLoaderCallback(this) {
         override fun onManagerConnected(status: Int) {
             when (status) {
                 LoaderCallbackInterface.SUCCESS -> {
-                    initializeCameraView()
+                    Log.i(TAG, "OpenCV успешно загружена.")
+                    System.loadLibrary("visible_guitar")
+                    cameraBridge!!.enableView()
                 }
-                else -> super.onManagerConnected(status)
+                else -> {
+                    super.onManagerConnected(status)
+                }
             }
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
+        ActivityCompat.requestPermissions(
+            this@CameraActivity,
+            arrayOf(Manifest.permission.CAMERA),
+            CAMERA_PERMISSION_REQUEST
+        )
         setContentView(R.layout.activity_main)
-        initializeCameraView()
-
-
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            when {
-//                ContextCompat.checkSelfPermission(
-//                    this,
-//                    android.Manifest.permission.CAMERA
-//                ) == PackageManager.PERMISSION_GRANTED -> {
-//                    initializeCameraView()
-//                }
-//                shouldShowRequestPermissionRationale(android.Manifest.permission.CAMERA) -> {
-//                }
-//                else -> {
-//                    requestPermissions(
-//                        arrayOf(android.Manifest.permission.CAMERA),
-//                        REQUEST_CODE_CAMERA_PERMISSION
-//                    )
-//                }
-//            }
-//        }
+        cameraBridge = findViewById(R.id.camera)
+        cameraBridge!!.visibility = SurfaceView.VISIBLE
+        cameraBridge!!.setCvCameraViewListener(this)
     }
 
-//    override fun onRequestPermissionsResult(
-//        requestCode: Int,
-//        permissions: Array<out String>,
-//        grantResults: IntArray
-//    ) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        if (requestCode == REQUEST_CODE_CAMERA_PERMISSION) {
-//            val indexOfCameraPermission = permissions.indexOf(android.Manifest.permission.CAMERA)
-//            if (indexOfCameraPermission != -1) {
-//                if (grantResults.isNotEmpty()) {
-//                    if (grantResults[indexOfCameraPermission] == PackageManager.PERMISSION_GRANTED) {
-//                        Toast.makeText(
-//                            applicationContext,
-//                            "Camera permission granted!",
-//                            Toast.LENGTH_LONG
-//                        ).show()
-//                        activateOpenCVCameraView()
-//                    } else {
-//                        Toast.makeText(
-//                            applicationContext,
-//                            "Camera permission is required to run this app!",
-//                            Toast.LENGTH_LONG
-//                        ).show()
-//                    }
-//                }
-//            }
-//        }
-//    }
-
-    private fun initializeCameraView() {
-        mOpenCvCameraView = findViewById(R.id.camera)
-        mOpenCvCameraView.setCameraPermissionGranted()
-        mOpenCvCameraView.setCameraIndex(CameraBridgeViewBase.CAMERA_ID_ANY)
-        mOpenCvCameraView.visibility = SurfaceView.VISIBLE
-        mOpenCvCameraView.setCvCameraViewListener(this)
-        mOpenCvCameraView.enableView()
-    }
-
-
-    override fun onResume() {
-        super.onResume()
-        if (ContextCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.CAMERA
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            if (!OpenCVLoader.initDebug()) {
-                Log.e(tag,"OpenCV НЕ был установлен.");
-                OpenCVLoader.initAsync(
-                    OpenCVLoader.OPENCV_VERSION_3_0_0, this,
-                    mLoaderCallback
-                )
-            } else {
-                Log.d(tag,"OpenCV был установлен.");
-                mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            CAMERA_PERMISSION_REQUEST -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    cameraBridge!!.setCameraPermissionGranted()
+                } else {
+                    val message = "Camera permission was not granted"
+                    Log.e(TAG, message)
+                    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+                }
+            }
+            else -> {
+                Log.e(TAG, "Unexpected permission request")
             }
         }
     }
 
-    override fun onCameraViewStarted(width: Int, height: Int) {
-        mIntermediateMat = Mat()
+    override fun onPause() {
+        super.onPause()
+        if (cameraBridge != null)
+            cameraBridge!!.disableView()
     }
 
-    override fun onCameraViewStopped() {
-        mIntermediateMat.release()
-    }
-
-    override fun onCameraFrame(inputFrame: CameraBridgeViewBase.CvCameraViewFrame?): Mat {
-        return inputFrame!!.gray()
+    override fun onResume() {
+        super.onResume()
+        if (!OpenCVLoader.initDebug()) {
+            Log.d(TAG, "OpenCV НЕ установлена.")
+            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION, this, loader)
+        } else {
+            Log.d(TAG, "OpenCV установлена.")
+            loader.onManagerConnected(LoaderCallbackInterface.SUCCESS)
+        }
     }
 
     override fun onDestroy() {
-        mOpenCvCameraView.disableView()
         super.onDestroy()
+        if (cameraBridge != null)
+            cameraBridge!!.disableView()
     }
 
-    
-    external fun stringFromJNI(): String
+    override fun onCameraViewStarted(width: Int, height: Int) {}
+
+    override fun onCameraViewStopped() {}
+
+    override fun onCameraFrame(frame: CameraBridgeViewBase.CvCameraViewFrame): Mat {
+        return frame.gray()
+    }
+
+    companion object {
+        private const val TAG = "MainActivity"
+        private const val CAMERA_PERMISSION_REQUEST = 1
+    }
 }
