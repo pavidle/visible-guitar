@@ -1,10 +1,39 @@
 #include <jni.h>
-#include <string>
+#include <opencv2/core/core.hpp>
+#include "include/BoundingBoxDrawer.h"
 
-extern "C" JNIEXPORT jstring JNICALL
-Java_com_example_visible_1guitar_MainActivity_stringFromJNI(
+
+BoundingBoxDrawer drawer = BoundingBoxDrawer();
+
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_visible_1guitar_CameraActivity_drawBoundingBox(
         JNIEnv* env,
-        jobject /* this */) {
-    std::string hello = "Hello from C++";
-    return env->NewStringUTF(hello.c_str());
+        jobject,
+        jlong address
+) {
+    cv::Mat& mat = *(cv::Mat*) address;
+    drawer.draw(mat);
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_visible_1guitar_CameraActivity_addPoint(
+        JNIEnv*,
+        jobject,
+        jint x,
+        jint y
+) {
+    int length = drawer.getPoints().size();
+    if (length < 4)
+        drawer.addPoint(cv::Point(x, y));
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_visible_1guitar_CameraActivity_convertFrame(
+        JNIEnv*,
+        jobject,
+        jlong address
+) {
+    cv::Mat& mat = *(cv::Mat*) address;
+
 }

@@ -1,23 +1,33 @@
 package com.example.visible_guitar
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.content.res.Resources
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
+import android.view.MotionEvent
 import android.view.SurfaceView
+import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import org.opencv.android.BaseLoaderCallback
 import org.opencv.android.CameraBridgeViewBase
 import org.opencv.android.LoaderCallbackInterface
 import org.opencv.android.OpenCVLoader
-import org.opencv.core.Mat
+import org.opencv.core.*
+import org.opencv.imgproc.Imgproc
 
-class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewListener2 {
 
-    private var cameraBridge: CameraBridgeViewBase? = null
+class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewListener2, View.OnTouchListener {
+
+    private lateinit var cameraBridge: CameraBridgeViewBase
+    private lateinit var currentFrame: Mat
 
     private val loader = object : BaseLoaderCallback(this) {
         override fun onManagerConnected(status: Int) {
@@ -25,7 +35,7 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
                 LoaderCallbackInterface.SUCCESS -> {
                     Log.i(TAG, "OpenCV успешно загружена.")
                     System.loadLibrary("visible_guitar")
-                    cameraBridge!!.enableView()
+                    cameraBridge.enableView()
                 }
                 else -> {
                     super.onManagerConnected(status)
@@ -45,8 +55,11 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
         )
         setContentView(R.layout.activity_main)
         cameraBridge = findViewById(R.id.camera)
-        cameraBridge!!.visibility = SurfaceView.VISIBLE
-        cameraBridge!!.setCvCameraViewListener(this)
+        cameraBridge.visibility = SurfaceView.VISIBLE
+        cameraBridge.scaleX = 2f;
+        cameraBridge.scaleY = 2f;
+        cameraBridge.setCvCameraViewListener(this)
+        cameraBridge.setOnTouchListener(this)
     }
 
     override fun onRequestPermissionsResult(
@@ -58,7 +71,7 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
         when (requestCode) {
             CAMERA_PERMISSION_REQUEST -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    cameraBridge!!.setCameraPermissionGranted()
+                    cameraBridge.setCameraPermissionGranted()
                 } else {
                     val message = "Camera permission was not granted"
                     Log.e(TAG, message)
@@ -73,8 +86,7 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
 
     override fun onPause() {
         super.onPause()
-        if (cameraBridge != null)
-            cameraBridge!!.disableView()
+        cameraBridge.disableView()
     }
 
     override fun onResume() {
@@ -90,20 +102,41 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
 
     override fun onDestroy() {
         super.onDestroy()
-        if (cameraBridge != null)
-            cameraBridge!!.disableView()
+        cameraBridge.disableView()
     }
 
     override fun onCameraViewStarted(width: Int, height: Int) {}
 
-    override fun onCameraViewStopped() {}
-
-    override fun onCameraFrame(frame: CameraBridgeViewBase.CvCameraViewFrame): Mat {
-        return frame.gray()
+    override fun onCameraViewStopped() {
+        cameraBridge.disableView()
     }
 
+    override fun onCameraFrame(frame: CameraBridgeViewBase.CvCameraViewFrame): Mat {
+        currentFrame = frame.rgba()
+        drawBoundingBox(currentFrame.nativeObjAddr)
+        convertFrame(currentFrame.nativeObjAddr)
+        return currentFrame
+    }
+
+    private external fun drawBoundingBox(address: Long)
+    private external fun addPoint(x: Int, y: Int)
+    private external fun convertFrame(address: Long)
+
     companion object {
-        private const val TAG = "MainActivity"
+        private val TAG = CameraActivity::class.java.simpleName
         private const val CAMERA_PERMISSION_REQUEST = 1
+    }
+
+    override fun onTouch(v: View, event: MotionEvent): Boolean {
+        val cols = currentFrame.cols()
+        val rows = currentFrame.rows()
+        val xOffset = (cameraBridge.width - cols) / 2
+        val yOffset = (cameraBridge.height - rows) / 2
+        val x = event.x.toInt() - xOffset
+        val y = event.y.toInt() - yOffset
+        if (event.action == MotionEvent.ACTION_DOWN) {
+            addPoint(x, y)
+        }
+        return false
     }
 }
