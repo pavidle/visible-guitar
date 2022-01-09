@@ -1,33 +1,34 @@
 package com.example.visible_guitar
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.pm.PackageManager
-import android.content.res.Resources
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceView
 import android.view.View
 import android.view.WindowManager
+import android.widget.Button
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import org.opencv.android.BaseLoaderCallback
 import org.opencv.android.CameraBridgeViewBase
 import org.opencv.android.LoaderCallbackInterface
 import org.opencv.android.OpenCVLoader
 import org.opencv.core.*
-import org.opencv.imgproc.Imgproc
 
 
 class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewListener2, View.OnTouchListener {
 
     private lateinit var cameraBridge: CameraBridgeViewBase
     private lateinit var currentFrame: Mat
+    private var isClicked: Boolean = false
+
+    companion object {
+        private val TAG = CameraActivity::class.java.simpleName
+        private const val CAMERA_PERMISSION_REQUEST = 1
+    }
 
     private val loader = object : BaseLoaderCallback(this) {
         override fun onManagerConnected(status: Int) {
@@ -55,11 +56,16 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
         )
         setContentView(R.layout.activity_main)
         cameraBridge = findViewById(R.id.camera)
+        val begin = findViewById<Button>(R.id.begin)
         cameraBridge.visibility = SurfaceView.VISIBLE
-        cameraBridge.scaleX = 2f;
-        cameraBridge.scaleY = 2f;
+        cameraBridge.scaleX = 1.4f;
+        cameraBridge.scaleY = 1.4f;
         cameraBridge.setCvCameraViewListener(this)
         cameraBridge.setOnTouchListener(this)
+
+        begin.setOnClickListener {
+           isClicked = true
+        }
     }
 
     override fun onRequestPermissionsResult(
@@ -105,7 +111,9 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
         cameraBridge.disableView()
     }
 
-    override fun onCameraViewStarted(width: Int, height: Int) {}
+    override fun onCameraViewStarted(width: Int, height: Int) {
+        currentFrame = Mat(width, height, CvType.CV_8U)
+    }
 
     override fun onCameraViewStopped() {
         cameraBridge.disableView()
@@ -114,18 +122,17 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
     override fun onCameraFrame(frame: CameraBridgeViewBase.CvCameraViewFrame): Mat {
         currentFrame = frame.rgba()
         drawBoundingBox(currentFrame.nativeObjAddr)
-        convertFrame(currentFrame.nativeObjAddr)
+        if (isClicked) {
+            val mat = Mat()
+            convertFrame(currentFrame.nativeObjAddr, mat.nativeObjAddr)
+        }
         return currentFrame
     }
 
     private external fun drawBoundingBox(address: Long)
     private external fun addPoint(x: Int, y: Int)
-    private external fun convertFrame(address: Long)
+    private external fun convertFrame(address: Long, out: Long)
 
-    companion object {
-        private val TAG = CameraActivity::class.java.simpleName
-        private const val CAMERA_PERMISSION_REQUEST = 1
-    }
 
     override fun onTouch(v: View, event: MotionEvent): Boolean {
         val cols = currentFrame.cols()

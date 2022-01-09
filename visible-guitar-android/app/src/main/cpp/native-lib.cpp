@@ -1,7 +1,8 @@
 #include <jni.h>
+#include <iostream>
 #include <opencv2/core/core.hpp>
 #include "include/BoundingBoxDrawer.h"
-
+#include "include/FrameConverter.h"
 
 BoundingBoxDrawer drawer = BoundingBoxDrawer();
 
@@ -23,17 +24,20 @@ Java_com_example_visible_1guitar_CameraActivity_addPoint(
         jint x,
         jint y
 ) {
-    int length = drawer.getPoints().size();
+    int length = drawer.get_points().size();
     if (length < 4)
-        drawer.addPoint(cv::Point(x, y));
+        drawer.add_point(cv::Point(x, y));
 }
 
 extern "C" JNIEXPORT void JNICALL
 Java_com_example_visible_1guitar_CameraActivity_convertFrame(
         JNIEnv*,
         jobject,
-        jlong address
+        jlong input_address,
+        jlong output_address
 ) {
-    cv::Mat& mat = *(cv::Mat*) address;
-
+    cv::Mat& input = *(cv::Mat*) input_address;
+    cv::Mat& output = *(cv::Mat*) output_address;
+    FrameConverter frameConverter = FrameConverter(drawer.get_points());
+    frameConverter.convert(input, input);
 }

@@ -145,6 +145,8 @@ class PolygonDrawer(object):
             mask_zeros = np.zeros(frame.shape, frame.dtype)
             mask_zeros[:, :] = (255, 0, 0)
 
+
+
             blue_mask = cv2.bitwise_and(mask_zeros, mask_zeros, mask=mask)
             cv2.addWeighted(blue_mask, 1, frame, 1, 0, frame)
             dilated = cv2.dilate(masked, kernel, iterations=3)

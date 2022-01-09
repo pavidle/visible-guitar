@@ -8,9 +8,9 @@ class BoundingBoxDrawer {
 private:
     std::vector<cv::Point> points;
 public:
-    std::vector<cv::Point> getPoints();
-    void addPoint(const cv::Point&);
-    void draw(cv::Mat&);
+    std::vector<cv::Point> get_points();
+    void add_point(const cv::Point& point);
+    void draw(cv::Mat& input);
 };
 
 #endif

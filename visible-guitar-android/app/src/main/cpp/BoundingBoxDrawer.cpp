@@ -2,18 +2,18 @@
 #include <opencv2/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-std::vector<cv::Point> BoundingBoxDrawer::getPoints() {
+std::vector<cv::Point> BoundingBoxDrawer::get_points() {
     return points;
 }
 
-void BoundingBoxDrawer::addPoint(const cv::Point& point) {
+void BoundingBoxDrawer::add_point(const cv::Point& point) {
     points.push_back(point);
 }
 
-void BoundingBoxDrawer::draw(cv::Mat& mat) {
+void BoundingBoxDrawer::draw(cv::Mat& input) {
     for (const cv::Point& point : points)
-        cv::circle(mat, point, 7, cv::Scalar(0, 255, 0));
-    cv::polylines(mat, points, false, cv::Scalar(255, 0, 0));
+        cv::circle(input, point, 7, cv::Scalar(0, 255, 0));
+//    cv::polylines(input, points, false, cv::Scalar(255, 0, 0));
 }
 
 
