@@ -1,9 +1,7 @@
-//
-// Created by spide on 04.01.2022.
-//
-
 #ifndef VISIBLE_GUITAR_MATH_H
 #define VISIBLE_GUITAR_MATH_H
+
+#include <opencv2/imgproc.hpp>
 
 
 class Math {
@@ -13,4 +11,4 @@ public:
 };
 
 
-#endif //VISIBLE_GUITAR_MATH_H
+#endif

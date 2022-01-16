@@ -1,5 +1,5 @@
 #include <opencv2/imgproc.hpp>
-#include "include/Math.h"
+#include "../include/math/Math.h"
 
 
 double Math::get_angle_of_slope(cv::Mat& input) {
