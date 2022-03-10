@@ -9,17 +9,14 @@ cmake_minimum_required(VERSION 3.10.2)
 
 project("visible_guitar")
 
+
 include_directories(${OpenCV_DIR}/jni/include)
 add_library(lib_opencv SHARED IMPORTED)
 set_target_properties(lib_opencv PROPERTIES IMPORTED_LOCATION ${OpenCV_DIR}/libs/${ANDROID_ABI}/libopencv_java4.so)
 
 
-# Creates and names a library, sets it as either STATIC
-# or SHARED, and provides the relative paths to its source code.
-# You can define multiple libraries, and CMake builds them for you.
-# Gradle automatically packages shared libraries with your APK.
-
 file(GLOB SOURCES include/*/*.h include/*.h */*.cpp *.cpp)
+
 
 add_library( # Sets the name of the library.
         visible_guitar
@@ -31,6 +28,8 @@ add_library( # Sets the name of the library.
         ${SOURCES}
         native-lib.cpp
         )
+
+
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -55,3 +54,6 @@ target_link_libraries( # Specifies the target library.
         # Links the target library to the log library
         # included in the NDK.
         ${log-lib})
+
+#set(TEST_SRC_DIR ../../test/cpp)
+#include(../../test/cpp/CMakeLists.txt)

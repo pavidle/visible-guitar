@@ -19,11 +19,10 @@ import org.opencv.android.OpenCVLoader
 import org.opencv.core.*
 
 
-class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewListener2, View.OnTouchListener {
+class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewListener2 {
 
     private lateinit var cameraBridge: CameraBridgeViewBase
     private lateinit var currentFrame: Mat
-    private var isClicked: Boolean = false
 
     companion object {
         private val TAG = CameraActivity::class.java.simpleName
@@ -56,16 +55,10 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
         )
         setContentView(R.layout.activity_main)
         cameraBridge = findViewById(R.id.camera)
-        val begin = findViewById<Button>(R.id.begin)
         cameraBridge.visibility = SurfaceView.VISIBLE
-        cameraBridge.scaleX = 1.4f;
-        cameraBridge.scaleY = 1.4f;
+        cameraBridge.scaleX = 2f;
+        cameraBridge.scaleY = 2f;
         cameraBridge.setCvCameraViewListener(this)
-        cameraBridge.setOnTouchListener(this)
-
-        begin.setOnClickListener {
-           isClicked = true
-        }
     }
 
     override fun onRequestPermissionsResult(
@@ -121,29 +114,11 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
 
     override fun onCameraFrame(frame: CameraBridgeViewBase.CvCameraViewFrame): Mat {
         currentFrame = frame.rgba()
-        drawBoundingBox(currentFrame.nativeObjAddr)
-        if (isClicked) {
-            val mat = Mat()
-            convertFrame(currentFrame.nativeObjAddr, mat.nativeObjAddr)
-        }
+        val output = Mat()
+        convertFrame(currentFrame.nativeObjAddr, output.nativeObjAddr)
         return currentFrame
     }
 
-    private external fun drawBoundingBox(address: Long)
-    private external fun addPoint(x: Int, y: Int)
-    private external fun convertFrame(address: Long, out: Long)
+    private external fun convertFrame(address: Long, output: Long)
 
-
-    override fun onTouch(v: View, event: MotionEvent): Boolean {
-        val cols = currentFrame.cols()
-        val rows = currentFrame.rows()
-        val xOffset = (cameraBridge.width - cols) / 2
-        val yOffset = (cameraBridge.height - rows) / 2
-        val x = event.x.toInt() - xOffset
-        val y = event.y.toInt() - yOffset
-        if (event.action == MotionEvent.ACTION_DOWN) {
-            addPoint(x, y)
-        }
-        return false
-    }
 }
