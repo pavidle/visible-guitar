@@ -10,3 +10,5 @@ rootProject.name = "visible-guitar"
 include ':app'
 include ':opencv'
 project(':opencv').projectDir = file(opencvsdk + '/sdk')
+include ':data'
+include ':domain'

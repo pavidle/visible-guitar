@@ -21,14 +21,14 @@ std::vector<cv::Point> UkuleleStringFinder::findAllStringPoints() const {
     std::vector<cv::Point2d> eigenvectors = eigen.getVectors();
     std::vector<double> eigenvalues = eigen.getValues();
     for (int i = 0; i < 3; i++) {
-        cv::Point point = fretCenter_ + 0.05 * i * cv::Point(static_cast<int>(eigenvectors[0].x * eigenvalues[0]),
+        cv::Point point = fretCenter_ + 0.045 * i * cv::Point(static_cast<int>(eigenvectors[0].x * eigenvalues[0]),
                                                         static_cast<int>(eigenvectors[0].y * eigenvalues[0])
         );
         stringPoints.push_back(point);
     }
 
     for (int i = 0; i < 2; i++) {
-        cv::Point point = fretCenter_ - 0.05 * i * cv::Point(static_cast<int>(eigenvectors[0].x * eigenvalues[0]),
+        cv::Point point = fretCenter_ - 0.045 * i * cv::Point(static_cast<int>(eigenvectors[0].x * eigenvalues[0]),
                                                         static_cast<int>(eigenvectors[0].y * eigenvalues[0])
         );
         stringPoints.push_back(point);

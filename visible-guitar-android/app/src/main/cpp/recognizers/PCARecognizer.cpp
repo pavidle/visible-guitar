@@ -20,7 +20,7 @@ std::vector<cv::Point> PCARecognizer::get(const Chord &chord) const {
         if (contours.empty()) return std::vector<cv::Point>();
         std::vector<cv::Point> contour;
         try {
-            contour = contours.at(fret);
+            contour = contours.at(contours.size() - fret);
         } catch (const std::out_of_range& oor) {
             return std::vector<cv::Point>();
         }

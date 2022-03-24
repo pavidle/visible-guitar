@@ -7,6 +7,8 @@ PointPainter::PointPainter(const std::vector<cv::Point>& points) {
 
 void PointPainter::draw(const Frame &frame) {
     for (const cv::Point& point : points_) {
-        cv::circle(frame.getMatrix(), point, 4, cv::Scalar(255, 255, 255), 3);
+        cv::circle(frame.getMatrix(), point, 5, cv::Scalar(255, 0, 0), 3);
+        cv::circle(frame.getMatrix(), point, 3, cv::Scalar(0, 0, 255), 3);
+
     }
 }

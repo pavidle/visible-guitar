@@ -1,0 +1,14 @@
+package com.example.domain.interactor
+
+import com.example.domain.common.Resource
+import com.example.domain.model.ChordEntity
+import com.example.domain.repository.ChordRepository
+import kotlinx.coroutines.flow.Flow
+
+class GetChordsUseCase(
+    private val chordRepository: ChordRepository
+) : UseCase<Unit, Flow<Resource<List<ChordEntity>>>> {
+
+    override suspend fun invoke(parameter: Unit): Flow<Resource<List<ChordEntity>>> =
+        chordRepository.getChords()
+}
