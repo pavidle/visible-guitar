@@ -1,12 +1,17 @@
 package com.example.visible_guitar.ui.adapter
 
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.compose.ui.res.colorResource
 import androidx.recyclerview.widget.RecyclerView
 import com.example.visible_guitar.R
+import com.example.visible_guitar.common.getRandomColorRGB
 import com.example.visible_guitar.model.Chord
+import kotlin.random.Random
 
 class ChordAdapter(
     private val onChordSelected: (Chord, View) -> Unit
@@ -35,8 +40,13 @@ class ChordAdapter(
     class ChordViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(chord: Chord, listener: (Chord, View) -> Unit) = with(itemView) {
-            val textView = itemView.findViewById(R.id.textViewLarge) as TextView
-            textView.text = chord.name
+            val itemName = itemView.findViewById(R.id.itemName) as TextView
+            val instrumentName = itemView.findViewById(R.id.instrumentName) as TextView
+            itemName.text = chord.name
+            val layout = itemView.findViewById(R.id.layoutItem) as LinearLayout
+            layout.setBackgroundColor(getRandomColorRGB(20, 160))
+            instrumentName.text = context.getString(R.string.instrument, chord.instrument.name)
+
             setOnClickListener {
                 listener(chord, itemView)
             }

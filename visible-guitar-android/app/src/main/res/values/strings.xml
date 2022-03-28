@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">visible-guitar</string>
+    <string name="test">test</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="Начать">Начать</string>
     <string name="Мелодии">Мелодии</string>
@@ -7,5 +8,5 @@
     <string name="Параметры">Параметры</string>
     <string name="Профиль">Профиль</string>
     <string name="Главная">Главная</string>
-
+    <string name="instrument">Требуется %s</string>
 </resources>

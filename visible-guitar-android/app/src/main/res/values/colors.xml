@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="dark_blue">#130CAB</color>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -7,4 +8,16 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="red">#FF0000</color>
+    <color name="dark_red">#94242f</color>
+    <color name="orange">#D96D12</color>
+    <color name="green">#2FEC0A</color>
+
+
+    <integer-array name="colors">
+        <item>@color/purple_500</item>
+        <item>@color/dark_red</item>
+        <item>@color/orange</item>
+        <item>@color/green</item>
+    </integer-array>
 </resources>
