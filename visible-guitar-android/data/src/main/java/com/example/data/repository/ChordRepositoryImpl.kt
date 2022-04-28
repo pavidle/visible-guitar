@@ -1,6 +1,5 @@
 package com.example.data.repository
 
-import android.util.Log
 import com.example.data.model.ChordDTO
 import com.example.data.remote.ChordApi
 import com.example.domain.common.Resource
@@ -13,7 +12,6 @@ import javax.inject.Inject
 import retrofit2.HttpException
 import java.io.IOException
 
-
 class ChordRepositoryImpl @Inject constructor(
     private val chordApi: ChordApi,
     private val chordMapper: Mapper<ChordDTO, ChordEntity>
@@ -21,7 +19,7 @@ class ChordRepositoryImpl @Inject constructor(
     override suspend fun getChords(): Flow<Resource<List<ChordEntity>>> = flow {
         try {
             emit(Resource.Loading())
-            val chords = chordApi.getChords().map { chordMapper.from(it) }
+            val chords = chordApi.getChords().map { chordMapper.convert(it) }
             emit(Resource.Success(chords))
         } catch (e: HttpException) {
             emit(Resource.Error(

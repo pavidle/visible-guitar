@@ -54,5 +54,16 @@ dependencies {
     kapt "androidx.hilt:hilt-compiler:1.0.0"
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
 
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.6.10"
+
+    implementation 'com.tinder.scarlet:scarlet:0.1.12'
+    implementation "com.tinder.scarlet:websocket-okhttp:0.1.10"
+    implementation "com.tinder.scarlet:stream-adapter-rxjava2:0.1.10"
+    implementation "com.tinder.scarlet:message-adapter-moshi:0.1.10"
+    implementation "com.tinder.scarlet:lifecycle-android:0.1.10"
+
+//    implementation("com.squareup.moshi:moshi:1.11.0")
+//    kapt("com.squareup.moshi:moshi-kotlin-codegen:1.11.0")
+
     implementation project(path: ':domain')
 }

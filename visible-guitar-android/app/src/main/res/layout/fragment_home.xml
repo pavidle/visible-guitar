@@ -15,7 +15,7 @@
         android:layout_marginTop="15dp"
         android:layout_marginEnd="15dp"
         android:fontFamily="sans-serif-light"
-        android:text="@string/Главная"
+        android:text="@string/main"
         android:textAlignment="center"
         android:textColor="#FFF"
         android:textSize="25sp"
@@ -49,6 +49,31 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/recyclerView" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/text_home">
+        <Button
+            android:id="@+id/reload"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@android:color/transparent"
+            android:drawableTop="@drawable/reload"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/not_connection"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/recyclerView" />
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

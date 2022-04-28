@@ -2,11 +2,15 @@
     <string name="app_name">visible-guitar</string>
     <string name="test">test</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="Начать">Начать</string>
-    <string name="Мелодии">Мелодии</string>
-    <string name="Аккорды">Аккорды</string>
-    <string name="Параметры">Параметры</string>
-    <string name="Профиль">Профиль</string>
-    <string name="Главная">Главная</string>
+    <string name="begin">Начать</string>
+    <string name="melodies">Мелодии</string>
+    <string name="chords">Аккорды</string>
+    <string name="parameters">Параметры</string>
+    <string name="profile">Профиль</string>
+    <string name="main">Главная</string>
     <string name="instrument">Требуется %s</string>
+    <string name="title">Title</string>
+    <string name="not_connection">
+        Произошла ошибка. Повторите попытку.</string>
+
 </resources>

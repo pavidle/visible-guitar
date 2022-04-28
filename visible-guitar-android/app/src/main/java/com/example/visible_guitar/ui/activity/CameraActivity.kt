@@ -5,26 +5,30 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.SurfaceView
 import android.view.WindowManager
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.example.visible_guitar.R
-import com.google.mediapipe.solutions.hands.Hands
 import org.opencv.android.BaseLoaderCallback
 import org.opencv.android.CameraBridgeViewBase
 import org.opencv.android.LoaderCallbackInterface
 import org.opencv.android.OpenCVLoader
 import org.opencv.core.*
-import org.json.JSONObject
+import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
+import com.example.visible_guitar.common.extensions.showBar
+import com.example.visible_guitar.viewmodel.CameraViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
-
-
+@AndroidEntryPoint
 class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewListener2 {
 
     private lateinit var cameraBridge: CameraBridgeViewBase
+    private val cameraViewModel by viewModels<CameraViewModel>()
     private lateinit var currentFrame: Mat
-    private lateinit var hands: Hands
+
 
     companion object {
         private val TAG = CameraActivity::class.java.simpleName
@@ -57,16 +61,27 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
         )
         setContentView(R.layout.activity_camera)
         cameraBridge = findViewById(R.id.camera)
-        cameraBridge.visibility = SurfaceView.VISIBLE
-        cameraBridge.scaleX = 2f;
-        cameraBridge.scaleY = 2f;
+//        cameraBridge.scaleX = 2f;
+//        cameraBridge.scaleY = 2f;
         cameraBridge.setCvCameraViewListener(this)
+        val image = findViewById<ImageView>(R.id.current_image)
+        cameraViewModel.updatedData.observe(this, {
+            data ->
+            run {
+                if (data.message != null) {
+                    showBar(image, data.message)
+                }
+                image.setImageBitmap(data.bitmap)
+
+            }
+        })
+
     }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
-        grantResults: IntArray
+        grantResults: IntArray,
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
@@ -116,29 +131,10 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
 
     override fun onCameraFrame(frame: CameraBridgeViewBase.CvCameraViewFrame): Mat {
         currentFrame = frame.rgba()
-        val stringJson = """
-         {
-           "type":"Foo",
-           "data":[
-              {
-                 "id":1,
-                 "title":"Hello"
-              },
-              {
-                 "id":2,
-                 "title":"World"
-              }
-           ]
+        lifecycleScope.launch {
+            cameraViewModel.subscribeOnUpdate(currentFrame)
         }
-        """
-//        val v = 7
-        val jo = JSONObject(stringJson)
-
-
-        find(currentFrame.nativeObjAddr, jo)
         return currentFrame
     }
-
-    private external fun find(address: Long, json: JSONObject)
-
+//    private external fun find(address: Long)
 }

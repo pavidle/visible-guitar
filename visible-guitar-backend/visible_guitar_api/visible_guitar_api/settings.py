@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'channels',
     'visible_guitar'
 ]
 
@@ -71,7 +72,15 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'visible_guitar_api.wsgi.application'
-
+ASGI_APPLICATION = 'visible_guitar_api.asgi.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases

@@ -8,10 +8,10 @@ import com.example.visible_guitar.model.Note
 import javax.inject.Inject
 
 class ChordMapper @Inject constructor() : Mapper<ChordEntity, Chord> {
-    override fun from(type: ChordEntity): Chord {
+    override fun convert(type: ChordEntity): Chord {
         val instrument = Instrument(
-            type.id,
-            type.name
+            type.instrument.id,
+            type.instrument.name
         )
         return Chord(
             type.id,

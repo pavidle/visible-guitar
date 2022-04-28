@@ -8,10 +8,10 @@ import com.example.domain.model.NoteEntity
 import javax.inject.Inject
 
 class ChordDTOMapper @Inject constructor() : Mapper<ChordDTO, ChordEntity> {
-    override fun from(type: ChordDTO): ChordEntity {
+    override fun convert(type: ChordDTO): ChordEntity {
         val instrument = InstrumentEntity(
-            type.id,
-            type.name
+            type.instrument.id,
+            type.instrument.name
         )
         return ChordEntity(
             type.id,

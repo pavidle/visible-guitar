@@ -8,7 +8,5 @@ import kotlinx.coroutines.flow.Flow
 class GetChordsUseCase(
     private val chordRepository: ChordRepository
 ) : UseCase<Unit, Flow<Resource<List<ChordEntity>>>> {
-
-    override suspend fun invoke(parameter: Unit): Flow<Resource<List<ChordEntity>>> =
-        chordRepository.getChords()
+    override suspend operator fun invoke(parameter: Unit) = chordRepository.getChords()
 }
