@@ -7,7 +7,7 @@ import numpy as np
 encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 95]
 
 
-class TestConsumer(AsyncWebsocketConsumer):
+class CameraConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
         await self.accept()

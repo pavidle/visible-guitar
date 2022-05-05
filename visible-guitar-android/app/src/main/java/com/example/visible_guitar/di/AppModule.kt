@@ -17,6 +17,7 @@ import com.example.data.remote.WebSocketRemote
 import com.example.data.remote.WebSocketRemoteImpl
 import com.example.data.repository.ChordRepositoryImpl
 import com.example.data.repository.WebSocketImageRepositoryImpl
+import com.example.domain.interactor.GetChordByIdUseCase
 import com.example.domain.interactor.GetChordsUseCase
 import com.example.domain.interactor.ReceiveImageUseCase
 import com.example.domain.interactor.SendImageUseCase
@@ -53,12 +54,12 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideChordDTOMapper() : Mapper<ChordDTO, ChordEntity> =
+    fun provideChordDTOMapper(): Mapper<ChordDTO, ChordEntity> =
         ChordDTOMapper()
 
     @Provides
     @Singleton
-    fun provideChordMapper() : Mapper<ChordEntity, Chord> =
+    fun provideChordMapper(): Mapper<ChordEntity, Chord> =
         ChordMapper()
 
     @Provides
@@ -75,12 +76,17 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideGetChordsUseCase(chordRepository: ChordRepository) : GetChordsUseCase =
+    fun provideGetChordsUseCase(chordRepository: ChordRepository): GetChordsUseCase =
         GetChordsUseCase(chordRepository)
 
     @Provides
     @Singleton
-    fun provideChordRepository(chordApi: ChordApi, chordMapper: ChordDTOMapper) : ChordRepository =
+    fun provideGetChordsByIdUseCase(chordRepository: ChordRepository): GetChordByIdUseCase =
+        GetChordByIdUseCase(chordRepository)
+
+    @Provides
+    @Singleton
+    fun provideChordRepository(chordApi: ChordApi, chordMapper: ChordDTOMapper): ChordRepository =
         ChordRepositoryImpl(chordApi, chordMapper)
 
     @Provides
@@ -113,7 +119,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideSendImageUseCase(webSocketImageRepository: WebSocketImageRepository) : SendImageUseCase =
+    fun provideSendImageUseCase(webSocketImageRepository: WebSocketImageRepository): SendImageUseCase =
         SendImageUseCase(webSocketImageRepository)
 
     @Provides

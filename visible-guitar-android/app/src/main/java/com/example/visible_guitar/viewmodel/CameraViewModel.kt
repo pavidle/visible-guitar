@@ -2,7 +2,6 @@ package com.example.visible_guitar.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.domain.interactor.ReceiveImageUseCase
 import com.example.domain.interactor.SendImageUseCase
 import com.example.domain.mapper.Mapper
@@ -11,6 +10,7 @@ import com.example.domain.model.SubscribeDataEntity
 import com.example.visible_guitar.common.extensions.launchCoroutine
 import com.example.visible_guitar.model.ReceiveData
 import com.example.visible_guitar.model.SubscribeData
+import com.example.visible_guitar.viewmodel.base.BaseDetailViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.opencv.core.Mat
 import javax.inject.Inject
@@ -21,7 +21,7 @@ class CameraViewModel @Inject constructor(
     private val receiveImageUseCase: ReceiveImageUseCase,
     private val subscribeDataMapper: Mapper<SubscribeData, SubscribeDataEntity>,
     private val receiveDataMapper: Mapper<ImageResponseEntity, ReceiveData>
-) : ViewModel() {
+) : BaseDetailViewModel() {
 
     private val _updatedData = MutableLiveData<ReceiveData>()
     val updatedData: LiveData<ReceiveData> = _updatedData
@@ -39,6 +39,7 @@ class CameraViewModel @Inject constructor(
             )
         }
     }
+
 
     private fun launchObservers() {
         launchCoroutine {

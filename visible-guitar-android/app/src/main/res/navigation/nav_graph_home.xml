@@ -9,7 +9,11 @@
         android:id="@+id/fragment_chord_detail"
         android:name="com.example.visible_guitar.ui.fragment.ChordDetailFragment"
         android:label="fragment_chord_detail"
-        tools:layout="@layout/fragment_chord_detail" />
+        tools:layout="@layout/fragment_chord_detail" >
+        <action
+            android:id="@+id/action_fragment_chord_detail_to_cameraFragment"
+            app:destination="@id/cameraFragment" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.example.visible_guitar.ui.fragment.HomeFragment"
@@ -17,6 +21,15 @@
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_navigation_home_to_chordDetailFragment"
-            app:destination="@id/fragment_chord_detail" />
+            app:destination="@id/fragment_chord_detail"
+            app:enterAnim="@anim/anim_from_right"
+            app:popEnterAnim="@anim/anim_from_left"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     </fragment>
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.example.visible_guitar.ui.fragment.CameraFragment"
+        android:label="fragment_camera"
+        tools:layout="@layout/fragment_camera" />
 </navigation>

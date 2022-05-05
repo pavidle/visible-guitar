@@ -7,7 +7,8 @@ import com.example.domain.mapper.Mapper
 import com.example.domain.model.ChordEntity
 import com.example.visible_guitar.common.extensions.launchCoroutine
 import com.example.visible_guitar.model.Chord
-import com.example.visible_guitar.model.states.ListState
+import com.example.visible_guitar.model.states.State
+import com.example.visible_guitar.viewmodel.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -15,22 +16,21 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getChordsUseCase: GetChordsUseCase,
     private val chordMapper: Mapper<ChordEntity, Chord>
-) : BaseViewModel<Chord>() {
+) : BaseViewModel() {
 
-    private val _state = MutableLiveData<ListState<Chord>>()
-    val state: LiveData<ListState<Chord>> = _state
+    private val _chordsState = MutableLiveData<State<Chord>>()
+    val chordsState: LiveData<State<Chord>> = _chordsState
 
     init {
         getChords()
     }
 
     private suspend fun loadChords() =
-        getChordsUseCase(Unit).subscribeOnCollect(chordMapper, _state)
+        getChordsUseCase(Unit).subscribeOnCollect(chordMapper, _chordsState)
 
 
     private fun getChords() =
         launchCoroutine {
-//            delay(1000L)
             loadChords()
         }
 

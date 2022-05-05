@@ -14,7 +14,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 class ScarletFactory (
     private val application: Application,
     private val moshi: Moshi
-) : ApiFactory<ScarletWebSocketApi> {
+)  {
 
     private val scarlet: Scarlet by lazy {
         Scarlet.Builder()
@@ -36,5 +36,5 @@ class ScarletFactory (
             .build()
     }
 
-    override fun create(): ScarletWebSocketApi = scarlet.create()
+    fun create(): ScarletWebSocketApi = scarlet.create()
 }

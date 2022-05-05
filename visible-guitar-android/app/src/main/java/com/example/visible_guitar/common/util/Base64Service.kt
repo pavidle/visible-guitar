@@ -3,10 +3,6 @@ package com.example.visible_guitar.common.util
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
-import android.util.Log
-import com.example.domain.model.ImageResponseEntity
-import com.example.visible_guitar.model.ReceiveData
-import com.example.visible_guitar.model.SubscribeData
 import org.opencv.core.*
 import javax.inject.Inject
 import org.opencv.imgcodecs.Imgcodecs
@@ -21,7 +17,7 @@ class Base64Service @Inject constructor() {
 
     fun encode(mat: Mat): String {
         val matOfByte = MatOfByte()
-        val resizedSize = Size(300.0, 300.0)
+        val resizedSize = Size(500.0, 300.0)
         val newSize = Mat()
         Imgproc.resize(mat, newSize, resizedSize)
         Imgcodecs.imencode(".jpg", newSize, matOfByte)

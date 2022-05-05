@@ -1,21 +1,19 @@
-package com.example.visible_guitar.ui.activity
+package com.example.visible_guitar.ui.fragment
 
 import android.Manifest
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.WindowManager
-import android.widget.ImageView
+import android.view.*
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.visible_guitar.R
-import com.example.visible_guitar.common.extensions.showBar
+import com.example.visible_guitar.databinding.FragmentCameraBinding
 import com.example.visible_guitar.viewmodel.CameraViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import org.opencv.android.BaseLoaderCallback
 import org.opencv.android.CameraBridgeViewBase
 import org.opencv.android.LoaderCallbackInterface
@@ -24,24 +22,25 @@ import org.opencv.core.CvType
 import org.opencv.core.Mat
 
 @AndroidEntryPoint
-class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewListener2 {
-
-    private lateinit var cameraBridge: CameraBridgeViewBase
-    private val cameraViewModel by viewModels<CameraViewModel>()
-    private lateinit var currentFrame: Mat
+class CameraFragment : Fragment(),
+    CameraBridgeViewBase.CvCameraViewListener2 {
 
     companion object {
-        private val TAG = CameraActivity::class.java.simpleName
+        private val TAG = CameraFragment::class.java.simpleName
         private const val CAMERA_PERMISSION_REQUEST = 1
-        const val ID = "ID"
     }
 
-    private val loader = object : BaseLoaderCallback(this) {
+    private val viewModel by viewModels<CameraViewModel>()
+    private val viewBinding by viewBinding<FragmentCameraBinding>()
+    private lateinit var cameraBridge: CameraBridgeViewBase
+    private lateinit var currentFrame: Mat
+
+    private val loader = object : BaseLoaderCallback(activity) {
         override fun onManagerConnected(status: Int) {
             when (status) {
                 LoaderCallbackInterface.SUCCESS -> {
                     Log.i(TAG, "OpenCV успешно загружена.")
-                    System.loadLibrary("visible_guitar")
+//                    System.loadLibrary("visible_guitar")
                     cameraBridge.enableView()
                 }
                 else -> {
@@ -51,34 +50,56 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val a = intent.getIntExtra("TEST", 0)
-        Log.e("A", a.toString())
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+        val view = inflater.inflate(R.layout.fragment_camera, container, false)
+        activity!!.window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
         ActivityCompat.requestPermissions(
-            this@CameraActivity,
+            activity!!,
             arrayOf(Manifest.permission.CAMERA),
             CAMERA_PERMISSION_REQUEST
         )
-        setContentView(R.layout.activity_camera)
-        cameraBridge = findViewById(R.id.camera)
+//        setContentView(R.layout.activity_camera)
+        cameraBridge = view.findViewById(R.id.camera1)
+
+        cameraBridge.visibility = SurfaceView.VISIBLE
 //        cameraBridge.scaleX = 2f;
 //        cameraBridge.scaleY = 2f;
         cameraBridge.setCvCameraViewListener(this)
-        val image = findViewById<ImageView>(R.id.current_image)
-        cameraViewModel.updatedData.observe(this, { data ->
-            if (data.message == null) {
-                image.setImageBitmap(data.bitmap)
-            } else showBar(image, data.message)
-        })
 
+        return view
     }
+
+
+//    override fun setupViews() {
+//        activity!!.window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+//        ActivityCompat.requestPermissions(
+//            activity!!,
+//            arrayOf(Manifest.permission.CAMERA),
+//            CAMERA_PERMISSION_REQUEST
+//        )
+////        activity!!.setContentView(R.layout.fragment_camera)
+//        cameraBridge = viewBinding.camera1
+//        cameraBridge.visibility = View.VISIBLE
+////        val image = viewBinding.currentImage
+//        cameraBridge.setCvCameraViewListener(this)
+////        viewModel.updatedData.observe(this, { data ->
+////            if (data.message == null) {
+////                image.setImageBitmap(data.bitmap)
+////            } else showBar(image, data.message)
+////        })
+//    }
+
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
-        grantResults: IntArray,
+        grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
@@ -88,7 +109,7 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
                 } else {
                     val message = "Camera permission was not granted"
                     Log.e(TAG, message)
-                    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+                    Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
                 }
             }
             else -> {
@@ -106,7 +127,7 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
         super.onResume()
         if (!OpenCVLoader.initDebug()) {
             Log.d(TAG, "OpenCV НЕ установлена.")
-            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION, this, loader)
+            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION, activity, loader)
         } else {
             Log.d(TAG, "OpenCV установлена.")
             loader.onManagerConnected(LoaderCallbackInterface.SUCCESS)
@@ -119,18 +140,25 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
     }
 
     override fun onCameraViewStarted(width: Int, height: Int) {
+        Log.e("HERE", "HERE")
+
         currentFrame = Mat(width, height, CvType.CV_8U)
     }
 
     override fun onCameraViewStopped() {
+        Log.e("HERE", "HERE")
+
         cameraBridge.disableView()
     }
 
     override fun onCameraFrame(frame: CameraBridgeViewBase.CvCameraViewFrame): Mat {
+        Log.e("HERE", "HERE")
         currentFrame = frame.rgba()
-        lifecycleScope.launch {
-            cameraViewModel.subscribeOnUpdate(currentFrame)
-        }
+//        lifecycleScope.launch {
+//            cameraViewModel.subscribeOnUpdate(currentFrame)
+//        }
         return currentFrame
     }
+
+
 }
