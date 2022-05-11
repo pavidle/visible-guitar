@@ -28,7 +28,6 @@ import com.example.domain.model.SubscribeDataEntity
 import com.example.domain.repository.ChordRepository
 import com.example.domain.repository.WebSocketImageRepository
 import com.example.visible_guitar.common.Constants
-import com.example.visible_guitar.common.util.Base64Service
 import com.example.visible_guitar.common.util.imagepreprocessor.Base64ImageAdapter
 import com.example.visible_guitar.common.util.imagepreprocessor.ImagePreprocessorService
 import com.example.visible_guitar.mapper.ChordMapper
@@ -157,11 +156,6 @@ object AppModule {
     @Provides
     @Singleton
     fun provideMoshi(): Moshi = Moshi.Builder().build()
-
-    @Provides
-    @Singleton
-    fun provideBase64Service(): Base64Service =
-        Base64Service()
 
     @Provides
     @Singleton
