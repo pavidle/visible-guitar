@@ -12,13 +12,8 @@ import javax.inject.Inject
 class SubscribeDataMapper @Inject constructor(
     private val imagePreprocessorService: ImagePreprocessorService
 ) : Mapper<SubscribeData, SubscribeDataEntity> {
-
-    override fun convert(type: SubscribeData): SubscribeDataEntity {
-        val matOfByte = MatOfByte()
-        type.mat.convertTo(matOfByte, CvType.CV_8UC3)
-        return SubscribeDataEntity(
-            imagePreprocessorService.processFrom(matOfByte)
+    override fun convert(type: SubscribeData): SubscribeDataEntity =
+        SubscribeDataEntity(
+            imagePreprocessorService.processFrom(type.mat)
         )
-    }
-
 }
