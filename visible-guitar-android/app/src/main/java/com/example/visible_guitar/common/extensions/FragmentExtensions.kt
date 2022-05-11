@@ -47,7 +47,7 @@ internal fun Fragment.setAlphaAnimation(view: View, value: Float) {
 internal fun Fragment.setBottomBehavior(view: View, animationCallback: (Float) -> Unit) {
 
     val bottomSheet = BottomSheetBehavior.from(view).apply {
-        peekHeight = 400
+        peekHeight = 300
     }
     val bottomSheetCallback = object : BottomSheetBehavior.BottomSheetCallback() {
         override fun onStateChanged(bottomSheet: View, newState: Int) = Unit

@@ -2,6 +2,8 @@ package com.example.visible_guitar.ui.activity
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -13,15 +15,14 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.visible_guitar.R
 import com.example.visible_guitar.common.extensions.showBar
+import com.example.visible_guitar.model.ReceiveData
 import com.example.visible_guitar.viewmodel.CameraViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import org.opencv.android.BaseLoaderCallback
-import org.opencv.android.CameraBridgeViewBase
-import org.opencv.android.LoaderCallbackInterface
-import org.opencv.android.OpenCVLoader
-import org.opencv.core.CvType
-import org.opencv.core.Mat
+import org.opencv.android.*
+import org.opencv.core.*
+import org.opencv.imgproc.Imgproc
+import kotlin.concurrent.thread
 
 @AndroidEntryPoint
 class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewListener2 {
@@ -29,6 +30,8 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
     private lateinit var cameraBridge: CameraBridgeViewBase
     private val cameraViewModel by viewModels<CameraViewModel>()
     private lateinit var currentFrame: Mat
+    private var receiveData: ReceiveData? = null
+
 
     companion object {
         private val TAG = CameraActivity::class.java.simpleName
@@ -67,12 +70,11 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
 //        cameraBridge.scaleY = 2f;
         cameraBridge.setCvCameraViewListener(this)
         val image = findViewById<ImageView>(R.id.current_image)
-        cameraViewModel.updatedData.observe(this, { data ->
-            if (data.message == null) {
-                image.setImageBitmap(data.bitmap)
-            } else showBar(image, data.message)
+        cameraViewModel.updatedData.observe(this@CameraActivity, { data ->
+            val array = MatOfByte(data.bitmap).toArray()
+            val bitmap = BitmapFactory.decodeByteArray(array, 0, array.size)
+            image.setImageBitmap(bitmap)
         })
-
     }
 
     override fun onRequestPermissionsResult(
@@ -127,10 +129,15 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
     }
 
     override fun onCameraFrame(frame: CameraBridgeViewBase.CvCameraViewFrame): Mat {
+
         currentFrame = frame.rgba()
+
+
         lifecycleScope.launch {
             cameraViewModel.subscribeOnUpdate(currentFrame)
         }
+
+
         return currentFrame
     }
 }

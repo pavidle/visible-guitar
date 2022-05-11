@@ -27,7 +27,10 @@ import com.example.domain.model.ImageResponseEntity
 import com.example.domain.model.SubscribeDataEntity
 import com.example.domain.repository.ChordRepository
 import com.example.domain.repository.WebSocketImageRepository
+import com.example.visible_guitar.common.Constants
 import com.example.visible_guitar.common.util.Base64Service
+import com.example.visible_guitar.common.util.imagepreprocessor.Base64ImageAdapter
+import com.example.visible_guitar.common.util.imagepreprocessor.ImagePreprocessorService
 import com.example.visible_guitar.mapper.ChordMapper
 import com.example.visible_guitar.mapper.ReceiveDataMapper
 import com.example.visible_guitar.mapper.SubscribeDataMapper
@@ -54,6 +57,16 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideImagePreprocessorService(): ImagePreprocessorService =
+        ImagePreprocessorService.Builder()
+            .setCompressionRatio(Constants.IMAGE_COMPRESSION_RATIO)
+            .setImageQuality(Constants.QUALITY)
+            .setImageAdapterFactory(Base64ImageAdapter.Factory())
+            .build()
+
+
+    @Provides
+    @Singleton
     fun provideChordDTOMapper(): Mapper<ChordDTO, ChordEntity> =
         ChordDTOMapper()
 
@@ -65,9 +78,9 @@ object AppModule {
     @Provides
     @Singleton
     fun provideSubscribeDataMapper(
-        base64Service: Base64Service
+        imagePreprocessorService: ImagePreprocessorService
     ): Mapper<SubscribeData, SubscribeDataEntity> =
-        SubscribeDataMapper(base64Service)
+        SubscribeDataMapper(imagePreprocessorService)
 
     @Provides
     @Singleton
@@ -104,9 +117,10 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideReceiveDataMapper(base64Service: Base64Service):
-            Mapper<ImageResponseEntity, ReceiveData> =
-        ReceiveDataMapper(base64Service)
+    fun provideReceiveDataMapper(
+        imagePreprocessorService: ImagePreprocessorService
+    ): Mapper<ImageResponseEntity, ReceiveData> =
+        ReceiveDataMapper(imagePreprocessorService)
 
     @Provides
     @Singleton

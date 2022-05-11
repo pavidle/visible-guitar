@@ -11,20 +11,10 @@ class ImageResponseEntityMapper @Inject constructor() {
         type: WebSocketEvent,
         data: ReceiveDataDTO
     ): ImageResponseEntity = when(type) {
-        is WebSocketEvent.Received, WebSocketEvent.ConnectionOpened -> {
+        is WebSocketEvent.Received, WebSocketEvent.ConnectionOpened ->
             ImageResponseEntity.Success(data.base64)
-        }
-        is WebSocketEvent.ConnectionClosed -> {
-            Log.e("CLOSED", "CONNECTION CLOSED")
-            ImageResponseEntity.Closed(data.base64, type.reason)
-        }
-        is WebSocketEvent.ConnectionClosing -> {
-            Log.e("CLOSING", "CONNECTION CLOSING")
-            ImageResponseEntity.Closed(data.base64, type.reason)
-            }
-        is WebSocketEvent.ConnectionFailed -> {
-            Log.e("FAILED", "CONNECTION FAILED")
-            ImageResponseEntity.Error(data.base64, type.error.message)
-            }
+        is WebSocketEvent.ConnectionClosed -> ImageResponseEntity.Closed(data.base64, type.reason)
+        is WebSocketEvent.ConnectionClosing -> ImageResponseEntity.Closed(data.base64, type.reason)
+        is WebSocketEvent.ConnectionFailed -> ImageResponseEntity.Error(data.base64, type.error.message)
     }
 }

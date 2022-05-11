@@ -31,12 +31,14 @@ abstract class BaseFragment<VM : ViewModel>(
 
     protected open fun setupViews() = Unit
     protected open fun setupRequests() = Unit
+    protected open fun setupListeners() = Unit
     protected open fun setupObservers() = Unit
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupViews()
         setupRequests()
+        setupListeners()
         setupObservers()
     }
 }
