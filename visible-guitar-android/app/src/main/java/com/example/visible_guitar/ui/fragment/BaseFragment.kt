@@ -24,7 +24,7 @@ abstract class BaseFragment<VM : ViewModel>(
     ): RecyclerView {
         val recyclerViewBuilder = RecyclerViewBuilder(recyclerView)
         return recyclerViewBuilder
-            .setLinearManager(context!!, LinearLayoutManager.HORIZONTAL)
+            .setLinearManager(requireContext(), LinearLayoutManager.HORIZONTAL)
             .setAdapter(adapter)
             .build()
     }

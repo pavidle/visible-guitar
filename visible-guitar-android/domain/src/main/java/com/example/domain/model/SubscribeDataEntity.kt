@@ -1,5 +1,8 @@
 package com.example.domain.model
 
+import org.opencv.core.Mat
+
+
 data class SubscribeDataEntity(
-    val base64: String
+    val mat: Mat
 )

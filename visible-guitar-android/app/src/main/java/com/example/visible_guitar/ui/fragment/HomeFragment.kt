@@ -35,15 +35,15 @@ class HomeFragment : BaseFragment<HomeViewModel>(R.layout.fragment_home) {
         viewBinding.reload.setOnClickListener {
             viewModel.reload()
         }
-        viewModel.chordsState.observe(viewLifecycleOwner, { state ->
+        viewModel.chordsState.observe(viewLifecycleOwner) { state ->
             viewBinding.progressBar.isVisible = state is State.Loading
             viewBinding.reload.isVisible = state is State.Error
-            when(state) {
+            when (state) {
                 is State.Loading -> viewBinding.progressBar.visibility = View.VISIBLE
                 is State.Error -> showBar(viewBinding.recyclerView, state.error)
                 is State.Success -> chordAdapter.submitList(state.data)
             }
-        })
+        }
     }
 
     override fun setupViews() {

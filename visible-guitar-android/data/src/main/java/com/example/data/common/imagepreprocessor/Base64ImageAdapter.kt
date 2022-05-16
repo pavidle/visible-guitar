@@ -1,12 +1,9 @@
-package com.example.visible_guitar.common.util.imagepreprocessor
+package com.example.data.common.imagepreprocessor
 
-import android.graphics.BitmapFactory
 import android.util.Base64
-import android.util.Log
-import com.example.visible_guitar.common.util.imagepreprocessor.base.ImageAdapter
+import com.example.data.common.imagepreprocessor.base.ImageAdapter
 import org.opencv.core.Mat
 import org.opencv.core.MatOfByte
-import org.opencv.imgcodecs.Imgcodecs
 
 class Base64ImageAdapter : ImageAdapter<String> {
     override fun adaptFrom(mat: Mat): String {

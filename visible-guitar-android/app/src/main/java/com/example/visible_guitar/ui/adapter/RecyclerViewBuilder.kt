@@ -13,20 +13,18 @@ class RecyclerViewBuilder(
     fun setLinearManager(
         context: Context,
         orientation: Int
-    ): RecyclerViewBuilder {
+    ) = apply {
         recyclerView.layoutManager = LinearLayoutManager(
             context,
             orientation,
             false
         )
-        return this
     }
 
     fun <M : Model> setAdapter(
         adapter: RecyclerViewAdapter<M>
-    ): RecyclerViewBuilder {
+    ) = apply {
         recyclerView.adapter = adapter
-        return this
     }
 
     fun build(): RecyclerView {

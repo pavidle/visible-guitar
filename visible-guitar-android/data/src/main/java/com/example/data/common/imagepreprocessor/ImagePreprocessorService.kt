@@ -1,9 +1,7 @@
-package com.example.visible_guitar.common.util.imagepreprocessor
+package com.example.data.common.imagepreprocessor
 
-import android.util.Log
-import com.example.visible_guitar.common.util.imagepreprocessor.base.ImageAdapter
+import com.example.data.common.imagepreprocessor.base.ImageAdapter
 import org.opencv.core.Mat
-import org.opencv.core.MatOfByte
 
 
 class ImagePreprocessorService(

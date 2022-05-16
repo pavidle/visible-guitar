@@ -30,8 +30,6 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
     private lateinit var cameraBridge: CameraBridgeViewBase
     private val cameraViewModel by viewModels<CameraViewModel>()
     private lateinit var currentFrame: Mat
-    private var receiveData: ReceiveData? = null
-
 
     companion object {
         private val TAG = CameraActivity::class.java.simpleName
@@ -56,8 +54,6 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val a = intent.getIntExtra("TEST", 0)
-        Log.e("A", a.toString())
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         ActivityCompat.requestPermissions(
             this@CameraActivity,
@@ -66,15 +62,13 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
         )
         setContentView(R.layout.activity_camera)
         cameraBridge = findViewById(R.id.camera)
-//        cameraBridge.scaleX = 2f;
-//        cameraBridge.scaleY = 2f;
         cameraBridge.setCvCameraViewListener(this)
         val image = findViewById<ImageView>(R.id.current_image)
-        cameraViewModel.updatedData.observe(this@CameraActivity, { data ->
+        cameraViewModel.updatedData.observe(this@CameraActivity) { data ->
             val array = MatOfByte(data.bitmap).toArray()
             val bitmap = BitmapFactory.decodeByteArray(array, 0, array.size)
             image.setImageBitmap(bitmap)
-        })
+        }
     }
 
     override fun onRequestPermissionsResult(

@@ -2,7 +2,7 @@ package com.example.visible_guitar.mapper
 
 import com.example.domain.mapper.Mapper
 import com.example.domain.model.ImageResponseEntity
-import com.example.visible_guitar.common.util.imagepreprocessor.ImagePreprocessorService
+import com.example.data.common.imagepreprocessor.ImagePreprocessorService
 import com.example.visible_guitar.model.ReceiveData
 import javax.inject.Inject
 

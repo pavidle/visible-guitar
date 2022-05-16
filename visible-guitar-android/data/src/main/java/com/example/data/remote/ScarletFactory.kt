@@ -1,8 +1,9 @@
-package com.example.data.common
+package com.example.data.remote
 
 import android.app.Application
 import com.example.data.BuildConfig
-import com.example.data.remote.ScarletWebSocketApi
+import com.example.data.common.Constants
+import com.example.data.common.FlowStreamAdapter
 import com.squareup.moshi.Moshi
 import com.tinder.scarlet.Scarlet
 import com.tinder.scarlet.lifecycle.android.AndroidLifecycle

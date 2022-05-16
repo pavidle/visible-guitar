@@ -18,7 +18,7 @@ class ChordDTOMapper @Inject constructor() : Mapper<ChordDTO, ChordEntity> {
             instrument,
             type.name,
             type.notes.map {
-                NoteEntity(it.id, it.name, it.string_number, it.fret_number)
+                NoteEntity(it.id, it.name, it.stringNumber, it.fretNumber)
             }
         )
     }

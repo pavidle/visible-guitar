@@ -7,7 +7,7 @@ class SendImageUseCase(
     private val webSocketImageRepository: WebSocketImageRepository
 ) : UseCase<SubscribeDataEntity, Unit>  {
     override suspend operator fun invoke(parameter: SubscribeDataEntity) {
-        webSocketImageRepository.subscribe(parameter.base64)
+        webSocketImageRepository.subscribe(parameter)
     }
 
 }

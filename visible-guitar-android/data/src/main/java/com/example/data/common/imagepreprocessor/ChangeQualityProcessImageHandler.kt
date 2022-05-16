@@ -1,6 +1,6 @@
-package com.example.visible_guitar.common.util.imagepreprocessor
+package com.example.data.common.imagepreprocessor
 
-import com.example.visible_guitar.common.util.imagepreprocessor.base.ProcessImageHandler
+import com.example.data.common.imagepreprocessor.base.ProcessImageHandler
 import org.opencv.core.Mat
 import org.opencv.core.MatOfByte
 import org.opencv.core.MatOfInt

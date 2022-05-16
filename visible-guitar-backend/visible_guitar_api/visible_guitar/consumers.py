@@ -21,7 +21,6 @@ class CameraConsumer(AsyncWebsocketConsumer):
             'C:\\visible-guitar\\visible-guitar-backend\\visible_guitar_api\\visible_guitar\\haarcascade_frontalface_default.xml'
         )
 
-
     async def connect(self):
         await self.accept()
 

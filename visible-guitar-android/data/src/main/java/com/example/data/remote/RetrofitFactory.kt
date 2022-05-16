@@ -1,6 +1,6 @@
-package com.example.data.common
+package com.example.data.remote
 
-import com.example.data.remote.ChordApi
+import com.example.data.common.Constants
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

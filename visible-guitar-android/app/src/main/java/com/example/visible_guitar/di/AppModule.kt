@@ -1,11 +1,9 @@
 package com.example.visible_guitar.di
 
 import android.app.Application
-import com.example.data.common.AsyncDispatcher
-import com.example.data.common.DefaultAsyncDispatcher
 
-import com.example.data.common.RetrofitFactory
-import com.example.data.common.ScarletFactory
+import com.example.data.remote.RetrofitFactory
+import com.example.data.remote.ScarletFactory
 import com.example.data.mapper.ChordDTOMapper
 import com.example.data.mapper.ImageResponseEntityMapper
 import com.example.data.mapper.WebSocketEventMapper
@@ -28,8 +26,10 @@ import com.example.domain.model.SubscribeDataEntity
 import com.example.domain.repository.ChordRepository
 import com.example.domain.repository.WebSocketImageRepository
 import com.example.visible_guitar.common.Constants
-import com.example.visible_guitar.common.util.imagepreprocessor.Base64ImageAdapter
-import com.example.visible_guitar.common.util.imagepreprocessor.ImagePreprocessorService
+import com.example.data.common.imagepreprocessor.Base64ImageAdapter
+import com.example.data.common.imagepreprocessor.ImagePreprocessorService
+import com.example.data.mapper.SubscribeDataDTOMapper
+import com.example.data.model.SubscribeDataDTO
 import com.example.visible_guitar.mapper.ChordMapper
 import com.example.visible_guitar.mapper.ReceiveDataMapper
 import com.example.visible_guitar.mapper.SubscribeDataMapper
@@ -51,7 +51,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideApi() : ChordApi =
+    fun provideApi(): ChordApi =
         RetrofitFactory().create()
 
     @Provides
@@ -77,9 +77,15 @@ object AppModule {
     @Provides
     @Singleton
     fun provideSubscribeDataMapper(
-        imagePreprocessorService: ImagePreprocessorService
     ): Mapper<SubscribeData, SubscribeDataEntity> =
-        SubscribeDataMapper(imagePreprocessorService)
+        SubscribeDataMapper()
+
+    @Provides
+    @Singleton
+    fun provideSubscribeDataDTOMapper(
+        imagePreprocessorService: ImagePreprocessorService
+    ): Mapper<SubscribeDataEntity, SubscribeDataDTO> =
+        SubscribeDataDTOMapper(imagePreprocessorService)
 
     @Provides
     @Singleton
@@ -126,9 +132,13 @@ object AppModule {
     fun provideWebSocketImageRepository(
         webSocketRemote: WebSocketRemote,
         responseEntityMapper: ImageResponseEntityMapper,
-        asyncDispatcher: AsyncDispatcher
+        subscribeDataDTOMapper: Mapper<SubscribeDataEntity, SubscribeDataDTO>
     ): WebSocketImageRepository =
-        WebSocketImageRepositoryImpl(webSocketRemote, responseEntityMapper, asyncDispatcher)
+        WebSocketImageRepositoryImpl(
+            webSocketRemote,
+            responseEntityMapper,
+            subscribeDataDTOMapper
+        )
 
     @Provides
     @Singleton
@@ -156,10 +166,4 @@ object AppModule {
     @Provides
     @Singleton
     fun provideMoshi(): Moshi = Moshi.Builder().build()
-
-    @Provides
-    @Singleton
-    fun provideAsyncDispatcher(): AsyncDispatcher =
-        DefaultAsyncDispatcher()
-
 }

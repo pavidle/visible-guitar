@@ -1,7 +1,6 @@
-package com.example.visible_guitar.common.util.imagepreprocessor.base
+package com.example.data.common.imagepreprocessor.base
 
 import org.opencv.core.Mat
-import org.opencv.core.MatOfByte
 
 interface ImageAdapter<T> {
     fun adaptFrom(mat: Mat): T
