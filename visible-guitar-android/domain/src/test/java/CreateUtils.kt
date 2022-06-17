@@ -3,7 +3,6 @@ package com.example.data.utils
 import com.example.domain.model.ChordEntity
 import com.example.domain.model.InstrumentEntity
 import com.example.domain.model.NoteEntity
-import com.example.domain.model.SubscribeDataEntity
 
 
 fun createInstrumentEntity(

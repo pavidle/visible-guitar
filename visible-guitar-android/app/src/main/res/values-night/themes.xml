@@ -1,16 +1,35 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.Visibleguitar" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
+    <style name="Theme.Visibleguitar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">#1f3565</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/black</item>
-        <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        
+    </style>
+
+    <style name="Theme.Visibleguitar.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="CustomCardCorners" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearance_custom_corners</item>
+    </style>
+
+    <style name="ShapeAppearance_custom_corners" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">54dp</item>
+        <item name="cornerSizeTopRight">54dp</item>
+    </style>
+
+    <style name="CircularProgress" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/white</item>
+    </style>
+
+    <style name="SplashTheme" parent="Theme.Visibleguitar">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>
 </resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="backgroundColorStart">#000</color>
+    <color name="backgroundColorEnd">#000</color>
+    <color name="backgroundAuth">#121212</color>
+    <color name="textColor">#FFF</color>
+    <color name="whiteBlack">#000</color>
+    <color name="iconColor">#FFF</color>
+
+    <color name="red">#FF0000</color>
+    <color name="dark_red">#94242f</color>
+
+
+</resources>

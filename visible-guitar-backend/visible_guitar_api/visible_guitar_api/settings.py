@@ -10,9 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os.path
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -25,7 +28,7 @@ SECRET_KEY = 'django-insecure-qlh-3%lhivs+^bwen__)3@18wbqgs+4=(ir)p8+6^a4c&r464i
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['192.168.0.110']
 
 
 # Application definition
@@ -37,10 +40,61 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'visible_guitar',
+    'users',
+    'django_extensions',
+    # 'channels',
     'rest_framework',
-    'channels',
-    'visible_guitar'
+    'rest_framework.authtoken',
+    'djoser',
+
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication'
+    ),
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.IsAuthenticated'
+    # ]
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+
+    'JTI_CLAIM': 'jti',
+
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
+
+DJOSER = {
+    'LOGIN_FIELD': 'email',
+    # 'USER_CREATE_PASSWORD_RETYPE': True,
+    # 'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
+    'SERIALIZERS': {
+        'user_create': 'users.serializers.MusicianUserCreateSerializer',
+        'user': 'users.serializers.MusicianUserCreateSerializer'
+    }
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -72,15 +126,15 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'visible_guitar_api.wsgi.application'
-ASGI_APPLICATION = 'visible_guitar_api.asgi.application'
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
-        },
-    },
-}
+# ASGI_APPLICATION = 'visible_guitar_api.asgi.application'
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             "hosts": [('127.0.0.1', 6379)],
+#         },
+#     },
+# }
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -112,6 +166,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
@@ -135,3 +190,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'users.MusicianUser'
+

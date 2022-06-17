@@ -1,7 +1,7 @@
 package com.example.data.repository
 
 import com.example.data.mapper.ChordDTOMapper
-import com.example.data.remote.ChordApi
+import com.example.data.remote.service.ChordApiService
 import com.example.data.utils.createChordDTO
 import com.example.domain.repository.ChordRepository
 import kotlinx.coroutines.runBlocking
@@ -13,13 +13,13 @@ import org.mockito.kotlin.stub
 
 class ChordRepositoryTest {
 
-    private val chordApi = mock<ChordApi>()
+    private val chordApiService = mock<ChordApiService>()
     private val chordDTOMapper = mock<ChordDTOMapper>()
     private lateinit var chordRepository: ChordRepository
 
     @Test
     fun setUp() {
-        chordRepository = ChordRepositoryImpl(chordApi, chordDTOMapper)
+        chordRepository = ChordRepositoryImpl(chordApiService, chordDTOMapper)
     }
 
     @Test
@@ -29,10 +29,10 @@ class ChordRepositoryTest {
             createChordDTO(id = 2, name = "B minor"),
             createChordDTO(id = 3)
         )
-        chordApi.stub {
+        chordApiService.stub {
             onBlocking { getChords() } doReturn chordsDTO
         }
-        val response = chordApi.getChords()
+        val response = chordApiService.getChords()
         assertEquals(response, chordsDTO)
     }
 
@@ -44,10 +44,10 @@ class ChordRepositoryTest {
             createChordDTO(id = 15)
         )
         val firstChord = chordsDTO[1]
-        chordApi.stub {
+        chordApiService.stub {
             onBlocking { getChordById(1) } doReturn firstChord
         }
-        val response = chordApi.getChordById(1)
+        val response = chordApiService.getChordById(1)
         assertEquals(response, firstChord)
     }
 }

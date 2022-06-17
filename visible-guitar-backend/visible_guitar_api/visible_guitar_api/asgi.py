@@ -14,9 +14,9 @@ from visible_guitar.routing import websocket_urlpatterns
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'visible_guitar_api.settings')
 
-# application = get_asgi_application()
+application = get_asgi_application()
 
-application = ProtocolTypeRouter({
-    "http": get_asgi_application(),
-    "websocket": URLRouter(websocket_urlpatterns)
-})
+# application = ProtocolTypeRouter({
+#     "http": get_asgi_application(),
+#     "websocket": URLRouter(websocket_urlpatterns)
+# })

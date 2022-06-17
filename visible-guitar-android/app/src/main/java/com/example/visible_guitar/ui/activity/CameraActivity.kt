@@ -2,8 +2,6 @@ package com.example.visible_guitar.ui.activity
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -12,17 +10,14 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.lifecycleScope
+import com.example.domain.ar.AugmentedReality
 import com.example.visible_guitar.R
-import com.example.visible_guitar.common.extensions.showBar
-import com.example.visible_guitar.model.ReceiveData
 import com.example.visible_guitar.viewmodel.CameraViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import org.opencv.android.*
 import org.opencv.core.*
 import org.opencv.imgproc.Imgproc
-import kotlin.concurrent.thread
+
 
 @AndroidEntryPoint
 class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewListener2 {
@@ -37,13 +32,17 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
         const val ID = "ID"
     }
 
+    private lateinit var ar: AugmentedReality
+
     private val loader = object : BaseLoaderCallback(this) {
         override fun onManagerConnected(status: Int) {
             when (status) {
                 LoaderCallbackInterface.SUCCESS -> {
                     Log.i(TAG, "OpenCV успешно загружена.")
-                    System.loadLibrary("visible_guitar")
+//                    System.loadLibrary("visible_guitar")
                     cameraBridge.enableView()
+                    ar = AugmentedReality.Builder().build()
+
                 }
                 else -> {
                     super.onManagerConnected(status)
@@ -64,11 +63,12 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
         cameraBridge = findViewById(R.id.camera)
         cameraBridge.setCvCameraViewListener(this)
         val image = findViewById<ImageView>(R.id.current_image)
-        cameraViewModel.updatedData.observe(this@CameraActivity) { data ->
-            val array = MatOfByte(data.bitmap).toArray()
-            val bitmap = BitmapFactory.decodeByteArray(array, 0, array.size)
-            image.setImageBitmap(bitmap)
-        }
+
+//        cameraViewModel.updatedData.observe(this@CameraActivity) { data ->
+////            val array = MatOfByte(data.bitmap).toArray()
+////            val bitmap = BitmapFactory.decodeByteArray(array, 0, array.size)
+////            image.setImageBitmap(bitmap)
+//        }
     }
 
     override fun onRequestPermissionsResult(
@@ -100,6 +100,7 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
 
     override fun onResume() {
         super.onResume()
+
         if (!OpenCVLoader.initDebug()) {
             Log.d(TAG, "OpenCV НЕ установлена.")
             OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION, this, loader)
@@ -122,16 +123,11 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
         cameraBridge.disableView()
     }
 
+
     override fun onCameraFrame(frame: CameraBridgeViewBase.CvCameraViewFrame): Mat {
 
-        currentFrame = frame.rgba()
+        currentFrame = frame.gray()
 
-
-        lifecycleScope.launch {
-            cameraViewModel.subscribeOnUpdate(currentFrame)
-        }
-
-
-        return currentFrame
+        return ar.handle(currentFrame)
     }
 }

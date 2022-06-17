@@ -4,7 +4,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.example.visible_guitar.model.Model
 
-typealias OnItemClickListener<T> = (T, View) -> Unit
+typealias OnItemClickListener<T> = (T) -> Unit
 
 abstract class RecyclerViewHolder<T : Model>(view: View) : RecyclerView.ViewHolder(view) {
 
@@ -15,7 +15,7 @@ abstract class RecyclerViewHolder<T : Model>(view: View) : RecyclerView.ViewHold
         listener: OnItemClickListener<T>? = null) = with(itemView) {
         bind(item)
         setOnClickListener {
-            listener?.let { it(item, this) }
+            listener?.let { it(item) }
         }
     }
 }

@@ -15,7 +15,7 @@ add_library(lib_opencv SHARED IMPORTED)
 set_target_properties(lib_opencv PROPERTIES IMPORTED_LOCATION ${OpenCV_DIR}/libs/${ANDROID_ABI}/libopencv_java4.so)
 
 
-file(GLOB SOURCES include/*/*.h include/*.h */*.cpp *.cpp)
+#file(GLOB SOURCES include/*/*.h include/*.h */*.cpp *.cpp)
 
 
 add_library( # Sets the name of the library.

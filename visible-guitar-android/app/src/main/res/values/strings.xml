@@ -14,6 +14,28 @@
     <string name="not_connection">
         Произошла ошибка. Повторите попытку.</string>
     <string name="back">back</string>
+    <string name="loginSummary">Войдите в свою учётную запись</string>
+    <string name="signUpSummary">Для начала создайте учётную запись</string>
+
+    <string name="username">Имя пользователя</string>
+    <string name="email">Почта</string>
+    <string name="password">Пароль</string>
+    <string name="login">Войти</string>
+    <string name="signUp">Создать учётную запись</string>
+
+    <string name="app">Приложение</string>
+    <string name="greeting">Начти играть на музыкальном инструменте.</string>
+
+    <string name="theme">Тёмная тема</string>
+    <string name="NotHaveAccount">Я новичок</string>
+    <string name="haveAccount">Я имею учетную запись</string>
+
+    <string-array name="greetings">
+        <item>Добро пожаловать!</item>
+        <item>Научитесь играть на музыкальном инструменте.</item>
+        <item>Используйте камеру смартфона и технологии компьютерного зрения для обучения.</item>
+        <item>Реализуйте свою мечту.</item>
+    </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

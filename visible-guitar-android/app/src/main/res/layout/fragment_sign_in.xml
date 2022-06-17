@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_sign_in"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/backgroundAuth"
+    tools:context=".ui.fragment.auth.SignInFragment"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:alpha="0.6"
+        android:scaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/login_top"/>
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:padding="25sp"
+        android:src="@drawable/back"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
+
+    <com.google.android.material.card.MaterialCardView
+        style="@style/CustomCardCorners"
+        android:layout_gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="50dp"
+        app:cardBackgroundColor="@color/whiteBlack">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/loginSummary"
+                android:gravity="center"
+                android:padding="10sp"
+                android:fontFamily="sans-serif-light"
+                android:textSize="18sp"
+                android:textColor="@color/textColor"/>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:layout_margin="10sp"
+                    android:background="@color/whiteBlack"
+                    android:autofillHints="emailAddress"
+                    android:hint="@string/email"
+                    tools:ignore="TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:background="@color/whiteBlack"
+                    android:layout_margin="10sp"
+                    android:autofillHints="password"
+                    android:hint="@string/password"
+                    tools:ignore="TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:indeterminate="true" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/login"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                app:cornerRadius="50dp"
+                android:textSize="15sp"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/login"/>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+</FrameLayout>

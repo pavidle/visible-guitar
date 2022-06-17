@@ -6,6 +6,7 @@ plugins {
     id 'dagger.hilt.android.plugin'
 }
 
+
 android {
     compileSdk 32
 
@@ -56,7 +57,7 @@ dependencies {
     implementation 'com.tinder.scarlet:scarlet:0.1.12'
     implementation "com.tinder.scarlet:websocket-okhttp:0.1.10"
     implementation "com.tinder.scarlet:stream-adapter-rxjava2:0.1.10"
-    implementation "com.tinder.scarlet:message-adapter-moshi:0.1.10"
+    implementation "com.tinder.scarlet:message-adapter-gson:0.1.10"
     implementation "com.tinder.scarlet:lifecycle-android:0.1.10"
 
     // tests
@@ -72,7 +73,10 @@ dependencies {
     testImplementation "app.cash.turbine:turbine:0.8.0"
     testImplementation "pl.pragmatists:JUnitParams:1.1.1"
 
+    // security
+    implementation 'androidx.security:security-crypto:1.1.0-alpha03'
+
     //openCV
-    implementation 'com.quickbirdstudios:opencv:4.5.3'
+//    implementation 'com.quickbirdstudios:opencv:4.5.3'
     implementation project(path: ':domain')
 }

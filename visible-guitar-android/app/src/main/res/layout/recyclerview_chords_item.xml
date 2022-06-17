@@ -9,10 +9,10 @@
     <androidx.cardview.widget.CardView
         android:layout_width="200dp"
         android:layout_height="200dp"
-        app:cardCornerRadius="10dp"
+        app:cardCornerRadius="20dp"
         app:cardUseCompatPadding="true"
         app:cardPreventCornerOverlap="true"
-
+        app:cardElevation="5dp"
         >
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layoutItem"

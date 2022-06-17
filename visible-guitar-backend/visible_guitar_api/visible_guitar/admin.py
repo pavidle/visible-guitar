@@ -1,10 +1,8 @@
 from django.contrib import admin
-from django.apps import apps
+from visible_guitar.models import *
 
-models = apps.get_models()
-
-for model in models:
-    try:
-        admin.site.register(model)
-    except admin.sites.AlreadyRegistered:
-        pass
+admin.site.register(Chord)
+admin.site.register(Note)
+admin.site.register(Instrument)
+admin.site.register(Author)
+admin.site.register(Melody)

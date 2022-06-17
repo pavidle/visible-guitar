@@ -4,7 +4,7 @@ from model_utils import Choices
 
 
 class Instrument(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=128)
 
     def __str__(self):
         return self.name
@@ -12,7 +12,7 @@ class Instrument(models.Model):
 
 class Note(models.Model):
     NAMES = Choices('C', 'C#', 'D', 'D#', 'E', 'F', 'G', 'G#', 'A', 'A#', 'B')
-    name = models.CharField(choices=NAMES, max_length=30)
+    name = models.CharField(choices=NAMES, max_length=128)
     fret_number = models.PositiveIntegerField()
     string_number = models.PositiveIntegerField(validators=[MaxValueValidator(6)])
 
@@ -21,13 +21,28 @@ class Note(models.Model):
 
 
 class Chord(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=128)
     instrument = models.ForeignKey(
         Instrument,
         on_delete=models.CASCADE,
-        related_name='chords'
     )
-    notes = models.ManyToManyField(Note, related_name='notes')
+    notes = models.ManyToManyField(Note)
+
+    def __str__(self):
+        return self.name
+
+
+class Author(models.Model):
+    name = models.CharField(max_length=128)
+
+    def __str__(self):
+        return self.name
+
+
+class Melody(models.Model):
+    name = models.CharField(max_length=128)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    chords = models.ManyToManyField(Chord)
 
     def __str__(self):
         return self.name

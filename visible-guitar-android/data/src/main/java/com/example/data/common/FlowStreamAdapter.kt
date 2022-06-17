@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import java.lang.reflect.Type
 
-@ExperimentalCoroutinesApi
+
 internal class FlowStreamAdapter<T> : StreamAdapter<T, Flow<T>> {
     override fun adapt(stream: Stream<T>) = callbackFlow {
         val observer = object : Stream.Observer<T> {

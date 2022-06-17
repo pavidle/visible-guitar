@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/backgroundAuth"
+    tools:context=".ui.fragment.auth.AuthFragment"
+    android:orientation="vertical">
+
+
+        <pl.droidsonroids.gif.GifImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.5"
+            android:scaleType="centerCrop"
+            android:src="@drawable/playing4"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:padding="30sp"
+                android:src="@drawable/icon"/>
+            <com.tomer.fadingtextview.FadingTextView
+                android:id="@+id/greeting"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textSize="20sp"
+                app:timeout="5000"
+                app:texts="@array/greetings"
+                android:fontFamily="sans-serif-light"
+                android:padding="10sp"
+                android:gravity="center"
+                android:textColor="@color/white"
+                />
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                app:cardBackgroundColor="@color/whiteBlack"
+                style="@style/CustomCardCorners">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    >
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/register"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-light"
+                        android:textColor="@color/white"
+                        app:cornerRadius="50dp"
+                        android:text="@string/NotHaveAccount"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/login"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-light"
+                        android:textColor="@color/white"
+                        app:cornerRadius="50dp"
+                        android:text="@string/haveAccount" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+
+</FrameLayout>
