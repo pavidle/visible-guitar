@@ -6,7 +6,7 @@
     <color name="textColor">#FFF</color>
     <color name="whiteBlack">#000</color>
     <color name="iconColor">#FFF</color>
-
+    <color name="download">#000000</color>
     <color name="red">#FF0000</color>
     <color name="dark_red">#94242f</color>
 

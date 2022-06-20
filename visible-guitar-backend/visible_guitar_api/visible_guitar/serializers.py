@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Chord
+from .models import Chord, Melody
 
 
 class ChordSerializer(serializers.ModelSerializer):
@@ -9,3 +9,10 @@ class ChordSerializer(serializers.ModelSerializer):
         fields = '__all__'
         depth = 1
 
+
+class MelodySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Melody
+        fields = '__all__'
+        depth = 2

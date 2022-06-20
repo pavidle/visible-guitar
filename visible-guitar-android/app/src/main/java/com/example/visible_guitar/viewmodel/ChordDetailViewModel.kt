@@ -13,7 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class ChordDetailViewModel @Inject constructor(
+open class ChordDetailViewModel @Inject constructor(
     private val getChordByIdUseCase: GetChordByIdUseCase,
     private val chordMapper: Mapper<ChordEntity, Chord>
 ) : BaseDetailViewModel() {

@@ -1,42 +1,46 @@
 package com.example.visible_guitar.ui.fragment
 
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.compose.ui.graphics.Color
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
+import by.kirich1409.viewbindingdelegate.viewBinding
+import com.example.visible_guitar.R
+import com.example.visible_guitar.common.extensions.showBar
+import com.example.visible_guitar.common.util.getRandomColorRGB
 import com.example.visible_guitar.databinding.FragmentProfileBinding
+import com.example.visible_guitar.model.states.State
+import com.example.visible_guitar.model.states.StateOfList
 import com.example.visible_guitar.viewmodel.ProfileViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-class ProfileFragment : Fragment() {
 
-    private lateinit var dashboardViewModel: ProfileViewModel
-    private var _binding: FragmentProfileBinding? = null
+@AndroidEntryPoint
+class ProfileFragment : BaseFragment<ProfileViewModel>(R.layout.fragment_profile) {
+    override val viewModel by viewModels<ProfileViewModel>()
+    private val viewBinding by viewBinding<FragmentProfileBinding>()
 
-    private val binding get() = _binding!!
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        dashboardViewModel =
-            ViewModelProvider(this).get(ProfileViewModel::class.java)
-
-        _binding = FragmentProfileBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        val textView: TextView = binding.textProfile
-        dashboardViewModel.text.observe(viewLifecycleOwner, {
-            textView.text = it
-        })
-        return root
+    override fun setupObservers() = with(viewBinding) {
+        viewModel.currentUserState.observe(viewLifecycleOwner) { state ->
+            viewBinding.progressBar.isVisible = state is State.Loading
+            viewBinding.exit.isVisible = state !is State.Loading
+            when (state) {
+                is State.Error -> showBar(fragmentProfile, state.error)
+                is State.Loading -> {
+                    viewBinding.progressBar.visibility = View.VISIBLE
+                    viewBinding.exit.visibility = View.VISIBLE
+                }
+                is State.Success -> {
+                    name.text = state.data.username
+                    chordsCount.text = context?.getString(R.string.chordsCount, state.data.chords.size.toString())
+                    melodiesCount.text = context?.getString(R.string.melodiesCount, state.data.melodies.size.toString())
+                }
+            }
+        }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+
+
 }

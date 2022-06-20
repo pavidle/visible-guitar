@@ -48,8 +48,8 @@ class MusicianUser(AbstractBaseUser, PermissionsMixin):
         blank=False,
         verbose_name="Почта"
     )
-    chords = models.ManyToManyField(Chord)
-    melodies = models.ManyToManyField(Melody)
+    chords = models.ManyToManyField(Chord, blank=True)
+    melodies = models.ManyToManyField(Melody, blank=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 

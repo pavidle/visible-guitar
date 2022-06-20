@@ -1,7 +1,8 @@
 package com.example.data.di
 
 import com.example.data.mapper.ChordDTOMapper
-import com.example.data.model.auth.TokenResponseDTO
+import com.example.data.mapper.UserDTOMapper
+import com.example.data.model.auth.SignUpRequestDTO
 import com.example.data.model.auth.UserDTO
 import com.example.data.remote.authenticator.LocalTokenProvider
 import com.example.data.remote.service.AuthApiService
@@ -10,7 +11,7 @@ import com.example.data.repository.ChordRepositoryImpl
 import com.example.data.repository.TokenAuthRepositoryImpl
 import com.example.data.repository.UserRepositoryImpl
 import com.example.domain.mapper.Mapper
-import com.example.domain.model.auth.TokenResponseEntity
+import com.example.domain.model.auth.SignUpRequestEntity
 import com.example.domain.model.auth.UserEntity
 import com.example.domain.repository.ChordRepository
 import com.example.domain.repository.TokenAuthRepository
@@ -35,9 +36,10 @@ object RepositoryModule {
     @Singleton
     fun provideUserRepository(
         authApiService: AuthApiService,
-        userDTOMapper: Mapper<UserEntity, UserDTO>
+        signUpRequestDTOMapper: Mapper<SignUpRequestEntity, SignUpRequestDTO>,
+        userDTOMapper: Mapper<UserDTO, UserEntity>
     ): UserRepository =
-        UserRepositoryImpl(authApiService, userDTOMapper)
+        UserRepositoryImpl(authApiService, signUpRequestDTOMapper, userDTOMapper)
 
     @Provides
     @Singleton

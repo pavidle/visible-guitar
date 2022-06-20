@@ -2,47 +2,44 @@ package com.example.visible_guitar.ui.activity
 
 import android.Manifest
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
-import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.viewModels
+import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import com.example.domain.ar.AugmentedReality
-import com.example.visible_guitar.R
-import com.example.visible_guitar.viewmodel.CameraViewModel
-import dagger.hilt.android.AndroidEntryPoint
-import org.opencv.android.*
-import org.opencv.core.*
-import org.opencv.imgproc.Imgproc
+import com.example.domain.ar.ArucoAugmentedReality
+import com.example.domain.ar.base.AugmentedReality
+import org.opencv.android.BaseLoaderCallback
+import org.opencv.android.CameraBridgeViewBase
+import org.opencv.android.LoaderCallbackInterface
+import org.opencv.android.OpenCVLoader
+import org.opencv.core.CvType
+import org.opencv.core.Mat
 
+abstract class BaseCameraActivity(
+    @LayoutRes private val layoutId: Int,
+    private val cameraId: Int
+) : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewListener2 {
 
-@AndroidEntryPoint
-class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewListener2 {
+    protected lateinit var cameraBridge: CameraBridgeViewBase
+    protected lateinit var currentFrame: Mat
+    protected lateinit var arucoAugmentedReality: AugmentedReality
 
-    private lateinit var cameraBridge: CameraBridgeViewBase
-    private val cameraViewModel by viewModels<CameraViewModel>()
-    private lateinit var currentFrame: Mat
-
-    companion object {
-        private val TAG = CameraActivity::class.java.simpleName
+    private val fpsMeter = FpsMeter(this)
+    private companion object {
         private const val CAMERA_PERMISSION_REQUEST = 1
-        const val ID = "ID"
     }
-
-    private lateinit var ar: AugmentedReality
 
     private val loader = object : BaseLoaderCallback(this) {
         override fun onManagerConnected(status: Int) {
             when (status) {
                 LoaderCallbackInterface.SUCCESS -> {
-                    Log.i(TAG, "OpenCV успешно загружена.")
-//                    System.loadLibrary("visible_guitar")
+                    Log.i("OPENCV", "OpenCV успешно загружена.")
                     cameraBridge.enableView()
-                    ar = AugmentedReality.Builder().build()
-
+                    arucoAugmentedReality = ArucoAugmentedReality.Builder().build()
                 }
                 else -> {
                     super.onManagerConnected(status)
@@ -55,20 +52,13 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         ActivityCompat.requestPermissions(
-            this@CameraActivity,
+            this,
             arrayOf(Manifest.permission.CAMERA),
             CAMERA_PERMISSION_REQUEST
         )
-        setContentView(R.layout.activity_camera)
-        cameraBridge = findViewById(R.id.camera)
+        setContentView(layoutId)
+        cameraBridge = findViewById(cameraId)
         cameraBridge.setCvCameraViewListener(this)
-        val image = findViewById<ImageView>(R.id.current_image)
-
-//        cameraViewModel.updatedData.observe(this@CameraActivity) { data ->
-////            val array = MatOfByte(data.bitmap).toArray()
-////            val bitmap = BitmapFactory.decodeByteArray(array, 0, array.size)
-////            image.setImageBitmap(bitmap)
-//        }
     }
 
     override fun onRequestPermissionsResult(
@@ -83,12 +73,12 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
                     cameraBridge.setCameraPermissionGranted()
                 } else {
                     val message = "Camera permission was not granted"
-                    Log.e(TAG, message)
+                    Log.e("OPENCV", message)
                     Toast.makeText(this, message, Toast.LENGTH_LONG).show()
                 }
             }
             else -> {
-                Log.e(TAG, "Unexpected permission request")
+                Log.e("OPENCV", "Unexpected permission request")
             }
         }
     }
@@ -102,10 +92,10 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
         super.onResume()
 
         if (!OpenCVLoader.initDebug()) {
-            Log.d(TAG, "OpenCV НЕ установлена.")
+            Log.d("OPENCV", "OpenCV НЕ установлена.")
             OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION, this, loader)
         } else {
-            Log.d(TAG, "OpenCV установлена.")
+            Log.d("OPENCV", "OpenCV установлена.")
             loader.onManagerConnected(LoaderCallbackInterface.SUCCESS)
         }
     }
@@ -123,11 +113,12 @@ class CameraActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewLis
         cameraBridge.disableView()
     }
 
-
-    override fun onCameraFrame(frame: CameraBridgeViewBase.CvCameraViewFrame): Mat {
-
-        currentFrame = frame.gray()
-
-        return ar.handle(currentFrame)
+    protected fun setFpsLabel(textView: TextView) {
+        fpsMeter.setFps(textView)
     }
+
+    override fun onCameraFrame(inputFrame: CameraBridgeViewBase.CvCameraViewFrame): Mat =
+        handleFrame(inputFrame)
+
+    protected abstract fun handleFrame(inputFrame: CameraBridgeViewBase.CvCameraViewFrame): Mat
 }

@@ -16,6 +16,7 @@
     <color name="white">#FFF</color>
     <color name="red">#FF0000</color>
     <color name="dark_red">#94242f</color>
+    <color name="download">#F3F3F3</color>
     <color name="switchTrackDisable">#8a8a8a</color>
     <color name="switchTrackActive">#1d45f7</color>
     <color name="iconColor">#FFF</color>

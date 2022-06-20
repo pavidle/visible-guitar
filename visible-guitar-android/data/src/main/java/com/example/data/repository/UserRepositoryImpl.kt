@@ -1,10 +1,16 @@
 package com.example.data.repository
 
+import android.util.Log
+import com.example.data.mapper.UserDTOMapper
+import com.example.data.model.auth.SignUpRequestDTO
 import com.example.data.model.auth.UserDTO
 import com.example.data.remote.service.AuthApiService
+import com.example.data.repository.base.BaseRepository
+import com.example.domain.common.Resource
 import com.example.domain.common.UserFieldErrorBody
 import com.example.domain.common.SignUpResult
 import com.example.domain.mapper.Mapper
+import com.example.domain.model.auth.SignUpRequestEntity
 import com.example.domain.model.auth.UserEntity
 import com.example.domain.repository.UserRepository
 import com.google.gson.Gson
@@ -17,12 +23,13 @@ import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
     private val authApiService: AuthApiService,
-    private val userDTOMapper: Mapper<UserEntity, UserDTO>
-) : UserRepository {
-    override fun createUser(userEntity: UserEntity): Flow<SignUpResult<Unit>> = flow {
+    private val signUpRequestDTOMapper: Mapper<SignUpRequestEntity, SignUpRequestDTO>,
+    private val userDTOMapper: Mapper<UserDTO, UserEntity>
+) : BaseRepository(), UserRepository {
+    override fun createUser(signUpRequestEntity: SignUpRequestEntity): Flow<SignUpResult<Unit>> = flow {
         try {
             emit(SignUpResult.Loading())
-            authApiService.createUser(userDTOMapper.convert(userEntity))
+            authApiService.createUser(signUpRequestDTOMapper.convert(signUpRequestEntity))
             emit(SignUpResult.Registered())
         } catch (throwable: Throwable) {
             when(throwable) {
@@ -37,6 +44,14 @@ class UserRepositoryImpl @Inject constructor(
                     emit(SignUpResult.NetworkError(message = "Отсутствует подключение к Интернету"))
                 }
             }
+        }
+    }
+
+    override fun getCurrentUser(): Flow<Resource<UserEntity>> {
+        return makeRequest {
+            userDTOMapper.convert(
+                authApiService.getCurrentUser()
+            )
         }
     }
 

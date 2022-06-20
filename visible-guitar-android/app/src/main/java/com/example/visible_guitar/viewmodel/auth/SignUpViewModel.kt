@@ -6,10 +6,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.domain.interactor.CreateANewUserUseCase
 import com.example.domain.mapper.Mapper
-import com.example.domain.model.auth.UserEntity
+import com.example.domain.model.auth.SignUpRequestEntity
 import com.example.domain.common.SignUpResult
 import com.example.visible_guitar.common.extensions.launchCoroutine
-import com.example.visible_guitar.model.auth.User
+import com.example.visible_guitar.model.auth.SignUpRequest
 import com.example.visible_guitar.model.event.UserSignUpFieldsEvent
 import com.example.visible_guitar.model.states.SignUpState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val createANewUserUseCase: CreateANewUserUseCase,
-    private val userMapper: Mapper<User, UserEntity>
+    private val signUpRequestMapper: Mapper<SignUpRequest, SignUpRequestEntity>
 ) : ViewModel() {
 
     private var stateOfFields by mutableStateOf(SignUpState())
@@ -40,13 +40,13 @@ class SignUpViewModel @Inject constructor(
 
     private fun signUp() {
         launchCoroutine {
-            val user = User(
+            val signUpRequest = SignUpRequest(
                 stateOfFields.username,
                 stateOfFields.email,
                 stateOfFields.password
             )
             createANewUserUseCase(
-                userMapper.convert(user)
+                signUpRequestMapper.convert(signUpRequest)
             ).collect { result -> _signUpChannel.send(result) }
         }
     }

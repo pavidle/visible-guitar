@@ -2,17 +2,18 @@ package com.example.domain.ar.aruco.drawer
 
 import android.util.Log
 import com.example.domain.ar.aruco.model.Line
+import com.example.domain.ar.aruco.model.Note
 import com.example.domain.ar.base.CrossPointsNeckCellGenerator
 import org.opencv.core.Mat
 import org.opencv.core.Point
 import kotlin.math.pow
 
 class DefaultNeckCellGenerator(
-    private val countOfStrings: Int = 6,
+    private val countOfStrings: Int = 4,
     private val countOfFrets: Int = 12
 ) : CrossPointsNeckCellGenerator {
 
-    override fun findCross(frame: Mat): List<Point> {
+    override fun findAllCrosses(frame: Mat): List<Point> {
         val points = mutableListOf<Point>()
         val strings = generateStringLines(frame)
         val frets = generateFretLines(frame)
@@ -24,25 +25,37 @@ class DefaultNeckCellGenerator(
                 points.add(intersection)
             }
         }
-
         return points
+    }
+
+    override fun findCross(frame: Mat, note: Note): Point {
+        val strings = generateStringLines(frame)
+        val frets = generateFretLines(frame)
+        val yString = strings[note.string].first.y
+        val xFret = frets[note.fret].first.x
+        return Point(xFret, yString)
     }
 
     override fun generateFretLines(frame: Mat): List<Line> {
         val lines = mutableListOf<Line>()
         val lengthOfNeck = frame.width()
-        val coefficient = 2.0.pow(countOfFrets / 12.toDouble())
-        val scale = lengthOfNeck / (1 - 1 / coefficient)
-        (1..countOfFrets).onEach { fretIndex ->
-            val ln = scale / 2.0.pow(fretIndex / 12.toDouble())
-            val x = scale - ln
+        val coefficient = 2.0.pow(1.0 / 12.0)
+        val scale = lengthOfNeck / (1.0 - 1.0 / coefficient.pow(countOfFrets.toDouble()))
+
+        (0..countOfFrets).onEach { fretIndex ->
+            val ln = scale / 2.0.pow(fretIndex.toDouble() / 12.0)
+//            val nextLn = scale / 2.0.pow((fretIndex + 1) / 12.toDouble())
+            val r = lengthOfNeck - scale + ln
+//            val nextX = scale - nextLn
+//            val half = (nextX - x) / 2
             lines.add(
                 Line(
-                    Point(lengthOfNeck - x, 0.0),
-                    Point(lengthOfNeck - x, frame.height().toDouble())
+                    Point(r, 0.0),
+                    Point(r, frame.height().toDouble())
                 )
             )
         }
+
         return lines
     }
 
@@ -52,7 +65,20 @@ class DefaultNeckCellGenerator(
         val lines = mutableListOf<Line>()
         val heightBetweenString = height / (countOfStrings + 1)
         var yPosition = 0.0
-        (0 until countOfStrings).onEach {
+        for (stringIndex in 0 until countOfStrings + 1) {
+            // distance between begin of neck and lasts strings is smaller
+
+            if (stringIndex == 0) {
+                yPosition += heightBetweenString / 2
+                lines.add(
+                    Line(
+                        Point(0.0, yPosition),
+                        Point(width.toDouble(), yPosition)
+                    )
+                )
+                continue
+            }
+
             yPosition += heightBetweenString
             lines.add(
                 Line(

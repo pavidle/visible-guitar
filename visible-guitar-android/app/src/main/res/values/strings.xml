@@ -13,9 +13,13 @@
     <string name="info">Info</string>
     <string name="not_connection">
         Произошла ошибка. Повторите попытку.</string>
+    <string name="download">Загрузка…</string>
+    <string name="fps">FPS: %s</string>
     <string name="back">back</string>
     <string name="loginSummary">Войдите в свою учётную запись</string>
     <string name="signUpSummary">Для начала создайте учётную запись</string>
+    <string name="melodiesCount">Изученных мелодии: %s</string>
+    <string name="chordsCount">Изученных аккордов: %s</string>
 
     <string name="username">Имя пользователя</string>
     <string name="email">Почта</string>

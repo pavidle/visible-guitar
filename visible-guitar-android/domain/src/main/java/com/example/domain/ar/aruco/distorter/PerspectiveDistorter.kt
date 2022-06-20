@@ -19,16 +19,16 @@ class PerspectiveDistorter(
         return Converters.vector_Point2f_to_Mat(secondPoints)
     }
 
-//    fun warp(frame: Mat): Mat {
-//        if (pointsOfInterest.size != 4)
-//            return frame
-//        val first = Converters.vector_Point2f_to_Mat(pointsOfInterest)
-//        val second = frameShapeToMat(frame)
-//        val matrix = Imgproc.getPerspectiveTransform(first, second)
-//        val img = Mat()
-//        Imgproc.warpPerspective(frame, img, matrix, frame.size())
-//        return img
-//    }
+    fun warpB(frame: Mat): Mat {
+        if (pointsOfInterest.size != 4)
+            return frame
+        val first = Converters.vector_Point2f_to_Mat(pointsOfInterest)
+        val second = frameShapeToMat(frame)
+        val matrix = Imgproc.getPerspectiveTransform(first, second)
+        val img = Mat()
+        Imgproc.warpPerspective(frame, img, matrix, frame.size())
+        return img
+    }
 
     fun warp(frame: Mat): Mat {
         if (pointsOfInterest.size != 4)

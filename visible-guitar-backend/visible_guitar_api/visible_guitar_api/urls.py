@@ -17,16 +17,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from visible_guitar.views import ChordViewSet
-from rest_framework import routers
+from users.urls import users_urlpatterns
+from visible_guitar.urls import visible_guitar_urlpatterns
 
-
-router = routers.SimpleRouter()
-router.register('chords', ChordViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/', include(router.urls)),
+    path('api/v1/', include(visible_guitar_urlpatterns)),
+    path('api/v1/', include(users_urlpatterns)),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.authtoken')),
     path('auth/', include('djoser.urls.jwt'))

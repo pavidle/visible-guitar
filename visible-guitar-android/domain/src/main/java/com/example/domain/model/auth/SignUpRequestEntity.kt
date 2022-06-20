@@ -1,6 +1,6 @@
-package com.example.visible_guitar.model.auth
+package com.example.domain.model.auth
 
-data class User(
+class SignUpRequestEntity(
     val username: String,
     val email: String,
     val password: String

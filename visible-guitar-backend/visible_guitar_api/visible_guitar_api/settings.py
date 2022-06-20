@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-qlh-3%lhivs+^bwen__)3@18wbqgs+4=(ir)p8+6^a4c&r464i
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.110']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'visible_guitar',
     'users',
     'django_extensions',
-    # 'channels',
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
@@ -55,9 +54,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication'
     ),
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    #     'rest_framework.permissions.IsAuthenticated'
-    # ]
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated'
+    ]
 }
 
 SIMPLE_JWT = {
@@ -92,7 +91,8 @@ DJOSER = {
     # 'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
     'SERIALIZERS': {
         'user_create': 'users.serializers.MusicianUserCreateSerializer',
-        'user': 'users.serializers.MusicianUserCreateSerializer'
+        'user': 'users.serializers.MusicianUserCreateSerializer',
+        'current_user': 'users.serializers.MusicianUserCreateSerializer'
     }
 }
 

@@ -1,9 +1,7 @@
 package com.example.data.remote.factory
 
-import android.content.SharedPreferences
 import com.example.data.BuildConfig
 import com.example.data.remote.authenticator.JsonWebTokenAuthenticator
-import com.example.data.remote.authenticator.LocalTokenProvider
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 

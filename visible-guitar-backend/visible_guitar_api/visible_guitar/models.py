@@ -41,7 +41,7 @@ class Author(models.Model):
 
 class Melody(models.Model):
     name = models.CharField(max_length=128)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, blank=True)
     chords = models.ManyToManyField(Chord)
 
     def __str__(self):

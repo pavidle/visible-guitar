@@ -6,6 +6,7 @@ import com.example.domain.common.SignUpResult
 import com.example.domain.interactor.*
 import com.example.domain.model.ChordEntity
 import com.example.domain.model.auth.AuthRequestEntity
+import com.example.domain.model.auth.SignUpRequestEntity
 import com.example.domain.model.auth.UserEntity
 import com.example.domain.repository.ChordRepository
 import com.example.domain.repository.TokenAuthRepository
@@ -37,15 +38,20 @@ object DomainModule {
     @Provides
     @Singleton
     fun provideCreateANewUserUseCase(userRepository: UserRepository)
-    : UseCase<UserEntity, Flow<SignUpResult<Unit>>> =
+    : UseCase<SignUpRequestEntity, Flow<SignUpResult<Unit>>> =
         CreateANewUserUseCase(userRepository)
 
     @Provides
     @Singleton
     fun provideSignInUseCase(
         tokenAuthRepository: TokenAuthRepository
-    )
-    : UseCase<AuthRequestEntity, Flow<AuthResult<Unit>>> =
+    ): UseCase<AuthRequestEntity, Flow<AuthResult<Unit>>> =
         SignInUseCase(tokenAuthRepository)
 
+    @Provides
+    @Singleton
+    fun provideGetCurrentUserUseCase(
+        userRepository: UserRepository
+    ): UseCase<Unit, Flow<Resource<UserEntity>>> =
+        GetCurrentUserUseCase(userRepository)
 }

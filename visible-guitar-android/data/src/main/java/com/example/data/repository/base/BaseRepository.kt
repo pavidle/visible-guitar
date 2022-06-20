@@ -9,20 +9,20 @@ import java.io.IOException
 abstract class BaseRepository {
 
     protected open fun <T: Any> makeRequest(request: suspend () -> T): Flow<Resource<T>> = flow {
-        try {
+//        try {
             emit(Resource.Loading())
             emit(Resource.Success(data = request()))
-        } catch (throwable: Throwable) {
-            when(throwable) {
-                is IOException -> emit(Resource.Error(
-                    message = "Отсутствует подключение к Интернету",
-                    data = null
-                ))
-                else -> emit(Resource.Error(
-                    message = "Произошла непредвиденная ошибка",
-                    data = null
-                ))
-            }
-        }
+//        } catch (throwable: Throwable) {
+//            when(throwable) {
+//                is IOException -> emit(Resource.Error(
+//                    message = "Отсутствует подключение к Интернету",
+//                    data = null
+//                ))
+//                else -> emit(Resource.Error(
+//                    message = "Произошла непредвиденная ошибка",
+//                    data = null
+//                ))
+//            }
+//        }
     }
 }

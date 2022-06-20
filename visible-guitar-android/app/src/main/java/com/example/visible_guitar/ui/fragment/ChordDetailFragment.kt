@@ -14,7 +14,7 @@ import com.example.visible_guitar.common.extensions.showBar
 import com.example.visible_guitar.common.util.getRandomColorRGB
 import com.example.visible_guitar.databinding.FragmentChordDetailBinding
 import com.example.visible_guitar.model.states.State
-import com.example.visible_guitar.ui.activity.CameraActivity
+import com.example.visible_guitar.ui.activity.ChordCameraActivity
 import com.example.visible_guitar.viewmodel.ChordDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.pow
@@ -47,8 +47,8 @@ class ChordDetailFragment : BaseFragment<ChordDetailViewModel>(R.layout.fragment
             findNavController().popBackStack()
         }
         play.setOnClickListener {
-            val intent = Intent(context, CameraActivity::class.java)
-            intent.putExtra(CameraActivity.ID, args.chordId)
+            val intent = Intent(context, ChordCameraActivity::class.java)
+            intent.putExtra(ChordCameraActivity.ID, args.chordId)
             startActivity(intent)
         }
     }

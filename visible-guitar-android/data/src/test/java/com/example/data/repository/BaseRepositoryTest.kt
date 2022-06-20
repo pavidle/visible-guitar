@@ -18,7 +18,7 @@ import java.io.IOException
 class BaseRepositoryTest {
 
     private class FakeRepository : BaseRepository() {
-        public override fun <T> makeRequest(request: suspend () -> T): Flow<Resource<T>> {
+        public override fun <T: Any> makeRequest(request: suspend () -> T): Flow<Resource<T>> {
             return super.makeRequest(request)
         }
     }

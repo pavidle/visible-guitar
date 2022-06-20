@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cameraActivity"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.CameraActivity">
+    tools:context=".ui.activity.ChordCameraActivity">
 
     <org.opencv.android.JavaCameraView
         android:id="@+id/camera"
@@ -15,26 +16,33 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        />
+        app:layout_constraintVertical_bias="0.0" />
 
-    <ImageView
-        android:id="@+id/current_image"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/fps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:textColor="@color/red"
+        android:fontFamily="sans-serif-black"
+        android:padding="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/state"
+        android:text="@string/download"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        />
+        android:fontFamily="sans-serif-black"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-<!--    <Button-->
-<!--        android:id="@+id/begin"-->
-<!--        android:layout_width="107dp"-->
-<!--        android:layout_height="56dp"-->
-<!--        android:backgroundTint="#3D19DD"-->
-<!--        android:text="@string/Начать"-->
-<!--        android:textColor="#FFF"-->
-<!--        app:layout_constraintBottom_toBottomOf="@+id/camera"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.878" />-->
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
