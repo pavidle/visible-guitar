@@ -20,7 +20,6 @@ class JsonWebTokenAuthenticator(
         if (response.count >= 3) {
             return null
         }
-        Log.e("HERE", "AUTHENTICATE!!")
         if (request.header("Authorization") != null) {
             return null
         }

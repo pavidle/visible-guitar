@@ -14,7 +14,7 @@ class UserDTOMapper : Mapper<UserDTO, UserEntity> {
             type.email,
             type.chords.map { chord ->
                 ChordEntity(chord.id,
-                InstrumentEntity(chord.id, chord.name),
+                InstrumentEntity(chord.instrument.id, chord.instrument.name),
                     chord.name,
                     chord.notes.map { note ->
                         NoteEntity(note.id, note.name, note.stringNumber, note.fretNumber)
@@ -26,7 +26,7 @@ class UserDTOMapper : Mapper<UserDTO, UserEntity> {
                     AuthorEntity(melody.author.id, melody.author.name),
                     melody.chords.map { chord ->
                     ChordEntity(chord.id,
-                        InstrumentEntity(chord.id, chord.name),
+                        InstrumentEntity(chord.instrument.id, chord.instrument.name),
                         chord.name,
                         chord.notes.map { note ->
                             NoteEntity(note.id, note.name, note.stringNumber, note.fretNumber)

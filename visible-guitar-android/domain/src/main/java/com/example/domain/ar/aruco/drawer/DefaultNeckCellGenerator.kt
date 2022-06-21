@@ -10,7 +10,7 @@ import kotlin.math.pow
 
 class DefaultNeckCellGenerator(
     private val countOfStrings: Int = 4,
-    private val countOfFrets: Int = 12
+    private val countOfFrets: Int = 15
 ) : CrossPointsNeckCellGenerator {
 
     override fun findAllCrosses(frame: Mat): List<Point> {

@@ -18,15 +18,15 @@
     <string name="back">back</string>
     <string name="loginSummary">Войдите в свою учётную запись</string>
     <string name="signUpSummary">Для начала создайте учётную запись</string>
-    <string name="melodiesCount">Изученных мелодии: %s</string>
+    <string name="melodiesCount">Изученных мелодий: %s</string>
     <string name="chordsCount">Изученных аккордов: %s</string>
-
+    <string name="chordOnCamera">Аккорд: %s</string>
     <string name="username">Имя пользователя</string>
     <string name="email">Почта</string>
     <string name="password">Пароль</string>
     <string name="login">Войти</string>
     <string name="signUp">Создать учётную запись</string>
-
+    <string name="endLearning">Закончить</string>
     <string name="app">Приложение</string>
     <string name="greeting">Начти играть на музыкальном инструменте.</string>
 

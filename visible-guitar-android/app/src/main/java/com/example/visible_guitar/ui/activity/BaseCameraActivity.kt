@@ -48,6 +48,8 @@ abstract class BaseCameraActivity(
         }
     }
 
+    protected abstract fun setupListeners()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -59,6 +61,7 @@ abstract class BaseCameraActivity(
         setContentView(layoutId)
         cameraBridge = findViewById(cameraId)
         cameraBridge.setCvCameraViewListener(this)
+        setupListeners()
     }
 
     override fun onRequestPermissionsResult(

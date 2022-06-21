@@ -17,6 +17,11 @@ class LocalTokenProvider @Inject constructor(
             .putString(ACCESS_TOKEN, token)
             .apply()
 
+    fun deleteAccessToken() =
+        encryptedSharedPreferences.edit()
+            .remove(ACCESS_TOKEN)
+            .apply()
+
     fun setRefreshToken(token: String) =
         encryptedSharedPreferences.edit()
             .putString(REFRESH_TOKEN, token)

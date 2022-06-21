@@ -54,4 +54,11 @@ object DomainModule {
         userRepository: UserRepository
     ): UseCase<Unit, Flow<Resource<UserEntity>>> =
         GetCurrentUserUseCase(userRepository)
+
+    @Provides
+    @Singleton
+    fun provideExitFromAccountUseCase(
+        tokenAuthRepository: TokenAuthRepository
+    ): UseCase<Unit, Unit> =
+        ExitFromAccountUseCase(tokenAuthRepository)
 }

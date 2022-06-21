@@ -2,6 +2,7 @@ package com.example.visible_guitar.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.domain.interactor.ExitFromAccountUseCase
 import com.example.domain.interactor.GetCurrentUserUseCase
 import com.example.domain.mapper.Mapper
 import com.example.domain.model.auth.UserEntity
@@ -14,6 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val getCurrentUserUseCase: GetCurrentUserUseCase,
+    private val exitFromAccountUseCase: ExitFromAccountUseCase,
     private val userMapper: Mapper<UserEntity, User>
 ) : BaseDetailViewModel() {
 
@@ -27,5 +29,8 @@ class ProfileViewModel @Inject constructor(
     private fun loadCurrentUser() {
         getCurrentUserUseCase(Unit).subscribeOnCollect(userMapper, _currentUserState)
     }
+
+    fun exitWithDeleteAccessToken() =
+        exitFromAccountUseCase(Unit)
 
 }

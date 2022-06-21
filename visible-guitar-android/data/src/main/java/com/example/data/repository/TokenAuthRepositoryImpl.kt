@@ -45,6 +45,10 @@ class TokenAuthRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun deleteAccessToken() =
+        localTokenProvider.deleteAccessToken()
+
+
     override fun refreshAccessToken(refreshToken: String): String {
         TODO("Not yet implemented")
     }

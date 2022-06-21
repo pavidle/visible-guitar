@@ -15,4 +15,6 @@ interface TokenAuthRepository {
     fun refreshAccessToken(
         refreshToken: String
     ): String
+
+    fun deleteAccessToken()
 }
