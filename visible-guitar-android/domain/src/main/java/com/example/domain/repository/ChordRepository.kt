@@ -7,4 +7,5 @@ import kotlinx.coroutines.flow.Flow
 interface ChordRepository {
     fun getChords(): Flow<Resource<List<ChordEntity>>>
     fun getChordById(id: Int): Flow<Resource<ChordEntity>>
+    fun addChordForCurrentUser(id: Int): Flow<Resource<Unit>>
 }

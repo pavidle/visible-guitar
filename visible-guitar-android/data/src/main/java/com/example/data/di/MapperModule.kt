@@ -2,11 +2,13 @@ package com.example.data.di
 
 import com.example.data.mapper.*
 import com.example.data.model.ChordDTO
+import com.example.data.model.MelodyDTO
 import com.example.data.model.auth.TokenResponseDTO
 import com.example.data.model.auth.SignUpRequestDTO
 import com.example.data.model.auth.UserDTO
 import com.example.domain.mapper.Mapper
 import com.example.domain.model.ChordEntity
+import com.example.domain.model.MelodyEntity
 import com.example.domain.model.auth.TokenResponseEntity
 import com.example.domain.model.auth.SignUpRequestEntity
 import com.example.domain.model.auth.UserEntity
@@ -39,4 +41,9 @@ object MapperModule {
     @Provides
     fun provideTokenResponseDTOMapper(): Mapper<TokenResponseDTO, TokenResponseEntity> =
         TokenResponseDTOMapper()
+
+    @Singleton
+    @Provides
+    fun provideMelodyDTOMapper(): Mapper<MelodyDTO, MelodyEntity> =
+        MelodyDTOMapper()
 }

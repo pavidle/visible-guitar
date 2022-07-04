@@ -53,9 +53,25 @@
                 android:id="@+id/sheet"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:paddingTop="150dp"
                 app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
                 android:background="@drawable/rounded"
                 android:orientation="vertical">
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="25sp"
+                    android:gravity="center"
+
+                    android:textColor="@color/textColor"
+                    android:text="Другие аккорды"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:orientation="vertical"
+                    android:overScrollMode="never"
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/recyclerview_chords_item_another" />
             </LinearLayout>
 
             <LinearLayout
@@ -73,7 +89,7 @@
                     android:layout_gravity="center"
                     android:background="@android:color/transparent"
                     android:paddingTop="20sp"
-                    android:src="@drawable/arrow_play2"
+                    android:src="@drawable/arrow_play3"
                     app:layout_anchor="@id/sheet"
                     tools:ignore="SpeakableTextPresentCheck" />
                 <TextView

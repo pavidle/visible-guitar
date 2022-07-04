@@ -4,7 +4,7 @@ import android.content.Context
 import android.widget.TextView
 import com.example.visible_guitar.R
 
-class FpsMeter(
+internal class FpsMeter(
     private val context: Context
 ){
     private var fps: Int = 0

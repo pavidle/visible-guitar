@@ -5,5 +5,5 @@ import android.graphics.Color
 
 fun getRandomColorRGB(from: Int, to: Int) : Int {
     val color = (from..to)
-    return Color.rgb(color.random(), color.random(), color.random())
+    return Color.argb(170, color.random(), color.random(), color.random())
 }

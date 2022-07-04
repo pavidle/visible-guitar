@@ -7,6 +7,7 @@ import com.example.data.remote.factory.HttpClientFactory
 import com.example.data.remote.factory.RetrofitFactory
 import com.example.data.remote.service.AuthApiService
 import com.example.data.remote.service.ChordApiService
+import com.example.data.remote.service.MelodyApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -52,4 +53,11 @@ object ApiServiceModule {
         jsonWebTokenAuthenticator: JsonWebTokenAuthenticator
     ): OkHttpClient =
         HttpClientFactory(jsonWebTokenAuthenticator).create()
+
+    @Provides
+    @Singleton
+    fun provideMelodyApiService(
+        okHttpClient: OkHttpClient
+    ): MelodyApiService =
+        RetrofitFactory(okHttpClient).create()
 }

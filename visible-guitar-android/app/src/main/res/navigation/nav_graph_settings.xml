@@ -7,7 +7,7 @@
     app:startDestination="@id/navigation_settings">
     <fragment
         android:id="@+id/navigation_settings"
-        android:name="com.example.visible_guitar.ui.fragment.SettingsFragment"
+        android:name="com.example.visible_guitar.ui.fragment.BaseSettingsFragment"
         android:label="settings"
         tools:layout="@layout/fragment_settings" />
 </navigation>

@@ -1,19 +1,25 @@
 package com.example.data.di
 
 import com.example.data.mapper.ChordDTOMapper
+import com.example.data.mapper.MelodyDTOMapper
 import com.example.data.mapper.UserDTOMapper
+import com.example.data.model.MelodyDTO
 import com.example.data.model.auth.SignUpRequestDTO
 import com.example.data.model.auth.UserDTO
 import com.example.data.remote.authenticator.LocalTokenProvider
 import com.example.data.remote.service.AuthApiService
 import com.example.data.remote.service.ChordApiService
+import com.example.data.remote.service.MelodyApiService
 import com.example.data.repository.ChordRepositoryImpl
+import com.example.data.repository.MelodyRepositoryImpl
 import com.example.data.repository.TokenAuthRepositoryImpl
 import com.example.data.repository.UserRepositoryImpl
 import com.example.domain.mapper.Mapper
+import com.example.domain.model.MelodyEntity
 import com.example.domain.model.auth.SignUpRequestEntity
 import com.example.domain.model.auth.UserEntity
 import com.example.domain.repository.ChordRepository
+import com.example.domain.repository.MelodyRepository
 import com.example.domain.repository.TokenAuthRepository
 import com.example.domain.repository.UserRepository
 import dagger.Module
@@ -48,4 +54,12 @@ object RepositoryModule {
         localTokenProvider: LocalTokenProvider
     ): TokenAuthRepository =
         TokenAuthRepositoryImpl(authApiService, localTokenProvider)
+
+    @Provides
+    @Singleton
+    fun provideMelodyRepository(
+        melodyApiService: MelodyApiService,
+        melodyDTOMapper: Mapper<MelodyDTO, MelodyEntity>
+    ): MelodyRepository =
+        MelodyRepositoryImpl(melodyApiService, melodyDTOMapper)
 }

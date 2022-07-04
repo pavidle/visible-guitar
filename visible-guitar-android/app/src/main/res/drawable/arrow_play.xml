@@ -1,5 +1,13 @@
-<vector android:height="46dp"
+<vector android:height="26dp"
     android:viewportHeight="24" android:viewportWidth="24"
-    android:width="46dp" xmlns:android="http://schemas.android.com/apk/res/android">
-    <path android:fillColor="@color/endCamera" android:pathData="M8,5v14l11,-7z"/>
+    android:width="26dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:name="rotate"
+        android:pivotX="12.5"
+        android:pivotY="12.0"
+
+        android:rotation="180">
+        <path android:fillColor="@color/endCamera" android:pathData="M8,5v14l11,-7z"/>
+
+    </group>
 </vector>

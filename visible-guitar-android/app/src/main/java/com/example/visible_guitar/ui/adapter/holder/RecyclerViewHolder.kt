@@ -12,7 +12,8 @@ abstract class RecyclerViewHolder<T : Model>(view: View) : RecyclerView.ViewHold
 
     fun bind(
         item: T,
-        listener: OnItemClickListener<T>? = null) = with(itemView) {
+        listener: OnItemClickListener<T>? = null
+    ) = with(itemView) {
         bind(item)
         setOnClickListener {
             listener?.let { it(item) }

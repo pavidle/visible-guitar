@@ -30,7 +30,7 @@ internal fun Fragment.launchCoroutine(block: suspend CoroutineScope.() -> Unit) 
     }
 }
 
-internal fun  Fragment.navigateToDetailScreen(
+internal fun Fragment.navigateToDetailScreen(
     action: Int,
     argumentStringId: String
 ): (Model, View) -> Unit {

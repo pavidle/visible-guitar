@@ -12,7 +12,7 @@ class VisibleGuitarApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         val isNightMode: Boolean = sharedPreferences.getBoolean("theme", false)
         if (isNightMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)

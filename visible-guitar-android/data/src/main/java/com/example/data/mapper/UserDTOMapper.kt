@@ -22,7 +22,9 @@ class UserDTOMapper : Mapper<UserDTO, UserEntity> {
                 )
             },
             type.melodies.map { melody ->
-                MelodyEntity(melody.name,
+                MelodyEntity(
+                    melody.id,
+                    melody.name,
                     AuthorEntity(melody.author.id, melody.author.name),
                     melody.chords.map { chord ->
                     ChordEntity(chord.id,

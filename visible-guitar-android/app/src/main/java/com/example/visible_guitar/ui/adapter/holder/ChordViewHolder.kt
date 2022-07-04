@@ -13,9 +13,7 @@ class ChordViewHolder(private val view: View) : RecyclerViewHolder<Chord>(view) 
     override fun bind(item: Chord) {
         val itemName = view.findViewById<AppCompatTextView>(R.id.itemName)
         val instrumentName = view.findViewById<AppCompatTextView>(R.id.instrumentName)
-//        val layout = view.findViewById<LinearLayout>(R.id.layoutItem)
         itemName.text = item.name
-//        layout.setBackgroundColor(getRandomColorRGB(20, 160))
         instrumentName.text = view.context.getString(R.string.instrument, item.instrument.name)
         instrumentName.setBackgroundColor(getRandomColorRGB(20, 160))
     }

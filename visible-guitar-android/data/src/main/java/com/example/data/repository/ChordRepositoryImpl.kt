@@ -21,4 +21,8 @@ class ChordRepositoryImpl @Inject constructor(
     override fun getChordById(id: Int): Flow<Resource<ChordEntity>> = makeRequest {
         chordMapper.convert(chordApiService.getChordById(id))
     }
+
+    override fun addChordForCurrentUser(id: Int) = makeRequest {
+        chordApiService.addChordForCurrentUser(id)
+    }
 }

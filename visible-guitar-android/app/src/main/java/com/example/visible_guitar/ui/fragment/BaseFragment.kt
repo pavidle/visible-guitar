@@ -20,11 +20,12 @@ abstract class BaseFragment<VM : ViewModel>(
 
     protected open fun <M : Model> setupRecyclerView(
         recyclerView: RecyclerView,
-        adapter: RecyclerViewAdapter<M>
+        adapter: RecyclerViewAdapter<M>,
+        orientation: Int
     ): RecyclerView {
         val recyclerViewBuilder = RecyclerViewBuilder(recyclerView)
         return recyclerViewBuilder
-            .setLinearManager(requireContext(), LinearLayoutManager.HORIZONTAL)
+            .setLinearManager(requireContext(), orientation)
             .setAdapter(adapter)
             .build()
     }
